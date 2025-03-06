@@ -506,7 +506,7 @@ installation() {
 	if [ ! -f /usr/local/bin/remnawave_reverse ]; then
 		ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
 	fi
-	
+	chmod +x install_remnawave.sh
 	echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
 	sleep 1
 	# Установка Remnawave
