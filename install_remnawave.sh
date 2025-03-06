@@ -112,7 +112,7 @@ rm -rf simple-web-templates-main/  # Удаление распакованной
 install_packages() {
     echo -e "${COLOR_YELLOW}Установка необходимых пакетов...${COLOR_RESET}"
     apt-get update -y
-	apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog
+	apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git
 	if grep -q "Ubuntu" /etc/os-release; then
 	install -m 0755 -d /etc/apt/keyrings
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | tee /etc/apt/keyrings/docker.asc > /dev/null
