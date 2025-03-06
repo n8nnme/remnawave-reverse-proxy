@@ -503,7 +503,8 @@ EOL
 
 # Функция для установки
 installation() {
-	if [ ! -f /usr/local/bin/remnawave_reverse ]; then
+	wget -O https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh
+ 	if [ ! -f /usr/local/bin/remnawave_reverse ]; then
 		ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
 	fi
 	chmod +x install_remnawave.sh
