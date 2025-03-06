@@ -503,9 +503,6 @@ EOL
 
 # Функция для установки
 installation() {
-	wget -O /root/install_remnawave.sh https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh
- 	ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
-	chmod +x install_remnawave.sh
 	echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
 	sleep 1
 	# Установка Remnawave
@@ -872,7 +869,10 @@ host_response=$(curl -s -X POST "http://$domain_url/api/hosts/create" \
 	
 	#Установка случайного шаблона
 	randomhtml
-	
+ 
+	wget -O /root/install_remnawave.sh https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh
+ 	ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
+	chmod +x install_remnawave.sh
     #Очистка экрана
     clear
 
