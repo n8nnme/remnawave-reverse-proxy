@@ -162,6 +162,7 @@ install_packages() {
 	# Включение UFW
 	ufw --force enable
 	touch /usr/local/bin/install_packages
+ clear
 }
 
 # Функция для получения сертификатов
