@@ -8,11 +8,11 @@
    - Привяжите ваш домен к Cloudflare.
    - Добавьте следующие DNS записи:
 
-| Type  | Name             | Content          | Proxy status  |
-| ----- | ---------------- | ---------------- | ------------- |
-| A     | example.com      | your_server_ip   | DNS only      |
-| CNAME | sub.example.com  | example.com      | DNS only      |
-| CNAME | node.example.com | example.com      | DNS only      |
+| Type  | Name              | Content          | Proxy status  |
+| ----- | ----------------- | ---------------- | ------------- |
+| A     | panel.example.com | your_server_ip   | DNS only      |
+| CNAME | sub.example.com   | example.com      | DNS only      |
+| CNAME | node.example.com  | example.com      | DNS only      |
 
 2. Настройки SSL/TLS в Cloudflare:
    - Перейдите в раздел SSL/TLS > Overview и выберите Full для параметра Configure.
