@@ -13,7 +13,6 @@
 | A     | example.com       | your_server_ip   | DNS only      |
 | CNAME | panel.example.com | example.com      | DNS only      |
 | CNAME | sub.example.com   | example.com      | DNS only      |
-| CNAME | node.example.com  | example.com      | DNS only      |
 
 2. Настройки SSL/TLS в Cloudflare:
    - Перейдите в раздел SSL/TLS > Overview и выберите Full для параметра Configure.
