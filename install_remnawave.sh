@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [ ! -f /usr/local/bin/remnawave_reverse ]; then
-    ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
-fi
-
 # Цвета
 COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
@@ -507,6 +503,10 @@ EOL
 
 # Функция для установки
 installation() {
+	if [ ! -f /usr/local/bin/remnawave_reverse ]; then
+		ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
+	fi
+	
 	echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
 	sleep 1
 	# Установка Remnawave
