@@ -10,7 +10,8 @@
 
 | Type  | Name              | Content          | Proxy status  |
 | ----- | ----------------- | ---------------- | ------------- |
-| A     | panel.example.com | your_server_ip   | DNS only      |
+| A     | example.com       | your_server_ip   | DNS only      |
+| CNAME | panel.example.com | example.com      | DNS only      |
 | CNAME | sub.example.com   | example.com      | DNS only      |
 | CNAME | node.example.com  | example.com      | DNS only      |
 
