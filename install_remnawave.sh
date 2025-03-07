@@ -910,7 +910,7 @@ case $OPTION in
     1)
         installation
         ;;
-	2)
+    2)
         randomhtml
         ;;
     3)
