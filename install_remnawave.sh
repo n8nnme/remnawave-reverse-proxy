@@ -529,10 +529,12 @@ EOL
 
 # Функция для установки
 installation() {
-	echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
-	sleep 1
-	# Установка Remnawave
+    echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
+    sleep 1
+    
+    # Установка Remnawave
     install_remnawave
+    
     # Извлечение основного домена
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
@@ -541,8 +543,10 @@ installation() {
 	sleep 1
     if check_certificates $DOMAIN; then
         echo "Используем существующие сертификаты."
+	sleep 1
     else
         echo "Сертификаты не найдены. Переходим к их получению."
+	sleep 2
         get_certificates $DOMAIN
     fi
 
