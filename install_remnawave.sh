@@ -175,7 +175,7 @@ get_certificates() {
 
     # Настройка Cloudflare API токена или глобального API ключа
     reading "Введите ваш Cloudflare API токен или глобальный API ключ:" CLOUDFLARE_API_KEY
-    reading "Введите email, зарегистрированный в Cloudflare (для Let's Encrypt):" CLOUDFLARE_EMAIL
+    reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
 
     # Проверка API ключа через Cloudflare API
     get_test_response() {
