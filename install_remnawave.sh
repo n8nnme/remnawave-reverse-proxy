@@ -202,9 +202,8 @@ dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
 EOL
     else
         # Если введен глобальный API ключ
-        reading "Введите ваш Cloudflare Email (для глобального API ключа):" CLOUDFLARE_GLOBAL_EMAIL
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
-dns_cloudflare_email = $CLOUDFLARE_GLOBAL_EMAIL
+dns_cloudflare_email = $CLOUDFLARE_EMAIL
 dns_cloudflare_api_key = $CLOUDFLARE_API_KEY
 EOL
     fi
