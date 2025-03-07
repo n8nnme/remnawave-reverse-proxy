@@ -199,7 +199,7 @@ EOL
       --key-type ecdsa \
       --elliptic-curve secp384r1
 	  # Добавление cron-задачи для автоматического обновления сертификатов
-    CRON_JOB="0 0 * * * /usr/bin/certbot renew --quiet --no-self-upgrade --post-hook \"cd /root/remnawave && docker compose stop remnawave-nginx && systemctl reload nginx\""
+    CRON_JOB="0 0 * * * /usr/bin/certbot renew --quiet --post-hook "bash -c 'cd /root/remnawave && docker compose stop remnawave-nginx && docker compose start remnawave-nginx'"
     (crontab -l 2>/dev/null | grep -v "/usr/bin/certbot renew"; echo "$CRON_JOB") | crontab -
 }
 
