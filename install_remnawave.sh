@@ -174,16 +174,25 @@ get_certificates() {
     echo -e "${COLOR_YELLOW}Установка Certbot и плагина для Cloudflare...${COLOR_RESET}"
     apt-get install -y certbot python3-certbot-dns-cloudflare
 
-    # Настройка Cloudflare API токена
-    reading "Введите ваш Cloudflare API токен:" CLOUDFLARE_API_TOKEN
-    mkdir -p ~/.secrets/certbot
-    cat > ~/.secrets/certbot/cloudflare.ini <<EOL
-dns_cloudflare_api_token = $CLOUDFLARE_API_TOKEN
-EOL
-    chmod 600 ~/.secrets/certbot/cloudflare.ini
-
-    # Запрос email, зарегистрированного в Cloudflare
+    # Настройка Cloudflare API токена или глобального API ключа
+    reading "Введите ваш Cloudflare API токен или глобальный API ключ:" CLOUDFLARE_API_KEY
     reading "Введите email, зарегистрированный в Cloudflare (для Let's Encrypt):" CLOUDFLARE_EMAIL
+
+    mkdir -p ~/.secrets/certbot
+    if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
+        # Если введен API токен
+        cat > ~/.secrets/certbot/cloudflare.ini <<EOL
+dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
+EOL
+    else
+        # Если введен глобальный API ключ
+        reading "Введите ваш Cloudflare Email (для глобального API ключа):" CLOUDFLARE_GLOBAL_EMAIL
+        cat > ~/.secrets/certbot/cloudflare.ini <<EOL
+dns_cloudflare_email = $CLOUDFLARE_GLOBAL_EMAIL
+dns_cloudflare_api_key = $CLOUDFLARE_API_KEY
+EOL
+    fi
+    chmod 600 ~/.secrets/certbot/cloudflare.ini
 
     # Получение wildcard сертификата
     echo -e "${COLOR_YELLOW}Получение wildcard сертификата...${COLOR_RESET}"
@@ -198,7 +207,8 @@ EOL
       --non-interactive \
       --key-type ecdsa \
       --elliptic-curve secp384r1
-	  # Добавление cron-задачи для автоматического обновления сертификатов
+
+    # Добавление cron-задачи для автоматического обновления сертификатов
     CRON_JOB="0 5 1 */2 * /usr/bin/certbot renew --quiet"
     echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/$DOMAIN.conf
     (crontab -l 2>/dev/null | grep -v "/usr/bin/certbot renew"; echo "$CRON_JOB") | crontab -
