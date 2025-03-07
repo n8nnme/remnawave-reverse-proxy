@@ -5,7 +5,6 @@ COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
 COLOR_YELLOW="\033[1;33m"
 COLOR_WHITE="\033[1;37m"
-COLOR_RED="\033[1;31m"
 
 question() {
     echo -e "${COLOR_GREEN}[?]${COLOR_RESET} ${COLOR_YELLOW}$*${COLOR_RESET}"
@@ -13,22 +12,24 @@ question() {
 reading() {
     read -rp " $(question "$1")" "$2"
 }
-error() {
-    echo -e "${COLOR_RED}$*\033[0m"
-    exit 1
-}
 
 check_os() {
     if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
     then
-        error "Ошибка: Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
+        echo ""
+        echo -e "Error: only Debian 11/12 and Ubuntu 22.04/24.04 are supported"
+        echo ""
+        exit 1
     fi
 }
 
 check_root() {
     if [[ $EUID -ne 0 ]]
     then
-        error "Ошибка: Скрипт нужно запускать с правами root"
+        echo ""
+        echo -e "Error: this script should be run as root"
+        echo ""
+        exit 1
     fi
 }
 
@@ -42,7 +43,7 @@ generate_password() {
 show_menu() {
     echo -e "${COLOR_GREEN}REMNAWAVE REVERSE-PROXY${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}1. Стандартная установка${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}2. Выбрать случайный шаблон для сайта${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}2. Выбрать случайный шаблон для сайта${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}3. Выход${COLOR_RESET}"
 }
 
@@ -70,7 +71,7 @@ check_certificates() {
 
 randomhtml() {
 # Переход в директорию /root/
-cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 0; }
+cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 1; }
 
 echo -e "${COLOR_YELLOW}Установка случайного шаблона для $DOMAIN${COLOR_RESET}"
 sleep 2
@@ -528,12 +529,10 @@ EOL
 
 # Функция для установки
 installation() {
-    echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
-    sleep 1
-    
-    # Установка Remnawave
+	echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
+	sleep 1
+	# Установка Remnawave
     install_remnawave
-    
     # Извлечение основного домена
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
@@ -542,10 +541,8 @@ installation() {
 	sleep 1
     if check_certificates $DOMAIN; then
         echo "Используем существующие сертификаты."
-	sleep 1
     else
         echo "Сертификаты не найдены. Переходим к их получению."
-	sleep 2
         get_certificates $DOMAIN
     fi
 
