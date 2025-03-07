@@ -5,6 +5,7 @@ COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
 COLOR_YELLOW="\033[1;33m"
 COLOR_WHITE="\033[1;37m"
+COLOR_RED="\033[1;31m"
 
 question() {
     echo -e "${COLOR_GREEN}[?]${COLOR_RESET} ${COLOR_YELLOW}$*${COLOR_RESET}"
@@ -175,14 +176,26 @@ get_certificates() {
     apt-get install -y certbot python3-certbot-dns-cloudflare
 
     # Настройка Cloudflare API токена или глобального API ключа
-    reading "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:" CLOUDFLARE_API_KEY
-    reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
+    reading "Введите ваш Cloudflare API токен или глобальный API ключ:" CLOUDFLARE_API_KEY
+    reading "Введите email, зарегистрированный в Cloudflare (для Let's Encrypt):" CLOUDFLARE_EMAIL
 
-    # Проверка, что email не пустой
-    if [[ -z "$CLOUDFLARE_EMAIL" ]]; then
-        echo -e "${COLOR_RED}Ошибка: Email не может быть пустым.${COLOR_RESET}"
-        return 1
-    fi
+    # Проверка API ключа через Cloudflare API
+    get_test_response() {
+      if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
+          test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${CLOUDFLARE_API_KEY}" --header "Content-Type: application/json")
+      else
+          test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${CLOUDFLARE_API_KEY}" --header "X-Auth-Email: ${CLOUDFLARE_EMAIL}" --header "Content-Type: application/json")
+      fi
+
+      if echo "$test_response" | grep -q '"success":true'; then
+          echo -e "${COLOR_GREEN}Cloudflare API ключ и email валидны.${COLOR_RESET}"
+      else
+          echo -e "${COLOR_RED}Ошибка: Неверный Cloudflare API ключ или email.${COLOR_RESET}"
+          exit 1
+      fi
+    }
+
+    get_test_response
 
     mkdir -p ~/.secrets/certbot
     if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
@@ -191,8 +204,10 @@ get_certificates() {
 dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
 EOL
     else
+        # Если введен глобальный API ключ
+        reading "Введите ваш Cloudflare Email (для глобального API ключа):" CLOUDFLARE_GLOBAL_EMAIL
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
-dns_cloudflare_email = $CLOUDFLARE_EMAIL
+dns_cloudflare_email = $CLOUDFLARE_GLOBAL_EMAIL
 dns_cloudflare_api_key = $CLOUDFLARE_API_KEY
 EOL
     fi
@@ -206,17 +221,15 @@ EOL
       --dns-cloudflare-propagation-seconds 60 \
       -d $DOMAIN \
       -d $WILDCARD_DOMAIN \
-      --email "$CLOUDFLARE_EMAIL" \
+      --email $CLOUDFLARE_EMAIL \
       --agree-tos \
-      --cert-name "$DOMAIN" \
-      --no-eff-email \
       --non-interactive \
       --key-type ecdsa \
       --elliptic-curve secp384r1
 
     # Добавление cron-задачи для автоматического обновления сертификатов
     CRON_JOB="0 5 1 */2 * /usr/bin/certbot renew --quiet"
-    echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/"$DOMAIN".conf
+    echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/$DOMAIN.conf
     (crontab -l 2>/dev/null | grep -v "/usr/bin/certbot renew"; echo "$CRON_JOB") | crontab -
 }
 
