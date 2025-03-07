@@ -178,6 +178,12 @@ get_certificates() {
     reading "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:" CLOUDFLARE_API_KEY
     reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
 
+    # Проверка, что email не пустой
+    if [[ -z "$CLOUDFLARE_EMAIL" ]]; then
+        echo -e "${COLOR_RED}Ошибка: Email не может быть пустым.${COLOR_RESET}"
+        return 1
+    fi
+
     mkdir -p ~/.secrets/certbot
     if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
         # Если введен API токен
@@ -200,9 +206,9 @@ EOL
       --dns-cloudflare-propagation-seconds 60 \
       -d $DOMAIN \
       -d $WILDCARD_DOMAIN \
-      --email $CLOUDFLARE_EMAIL \
+      --email "$CLOUDFLARE_EMAIL" \
       --agree-tos \
-      --cert-name $DOMAIN \
+      --cert-name "$DOMAIN" \
       --no-eff-email \
       --non-interactive \
       --key-type ecdsa \
@@ -210,7 +216,7 @@ EOL
 
     # Добавление cron-задачи для автоматического обновления сертификатов
     CRON_JOB="0 5 1 */2 * /usr/bin/certbot renew --quiet"
-    echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/$DOMAIN.conf
+    echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/"$DOMAIN".conf
     (crontab -l 2>/dev/null | grep -v "/usr/bin/certbot renew"; echo "$CRON_JOB") | crontab -
 }
 
