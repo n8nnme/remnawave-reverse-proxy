@@ -498,6 +498,7 @@ APP_HOST=0.0.0.0
 # V2RAY_MUX_ENABLED=true
 # V2RAY_MUX_TEMPLATE_PATH=/app/templates/v2ray/mux_default.json
 WEB_PAGE_TEMPLATE_PATH=/app/templates/subscription/index.html
+EOL
 }
 
 # Функция для установки
@@ -908,7 +909,7 @@ reading "Выберите действие (1-3):" OPTION
 # Обработать выбор
 case $OPTION in
     1)
-        install_remnawave
+        installation
         ;;
     2)
         randomhtml
