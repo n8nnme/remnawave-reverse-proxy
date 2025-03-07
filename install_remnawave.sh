@@ -200,7 +200,7 @@ EOL
       --dns-cloudflare-propagation-seconds 60 \
       -d $DOMAIN \
       -d $WILDCARD_DOMAIN \
-      --email $CLOUDFLARE_GLOBAL_EMAIL \
+      --email $CLOUDFLARE_EMAIL \
       --agree-tos \
       --cert-name $DOMAIN \
       --no-eff-email \
