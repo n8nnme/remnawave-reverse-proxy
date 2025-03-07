@@ -908,7 +908,7 @@ reading "Выберите действие (1-3):" OPTION
 # Обработать выбор
 case $OPTION in
     1)
-        installation
+        install_remnawave
         ;;
     2)
         randomhtml
