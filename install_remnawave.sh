@@ -5,12 +5,17 @@ COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
 COLOR_YELLOW="\033[1;33m"
 COLOR_WHITE="\033[1;37m"
+COLOR_RED="\033[1;31m"
 
 question() {
     echo -e "${COLOR_GREEN}[?]${COLOR_RESET} ${COLOR_YELLOW}$*${COLOR_RESET}"
 }
 reading() {
     read -rp " $(question "$1")" "$2"
+}
+error() {
+    echo -e "${COLOR_RED}$*\033[0m"
+    exit 1
 }
 
 check_os() {
