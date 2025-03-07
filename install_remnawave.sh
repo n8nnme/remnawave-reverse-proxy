@@ -902,7 +902,7 @@ fi
 check_os
 check_root
 show_menu
-reading "Выберите действие (1-3):" OPTION
+reading "Выберите действие (1-4):" OPTION
 
 case $OPTION in
     1)
