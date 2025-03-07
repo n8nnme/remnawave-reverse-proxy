@@ -175,8 +175,8 @@ get_certificates() {
     apt-get install -y certbot python3-certbot-dns-cloudflare
 
     # Настройка Cloudflare API токена или глобального API ключа
-    reading "Введите ваш Cloudflare API токен или глобальный API ключ:" CLOUDFLARE_API_KEY
-    reading "Введите email, зарегистрированный в Cloudflare (для Let's Encrypt):" CLOUDFLARE_EMAIL
+    reading "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:" CLOUDFLARE_API_KEY
+    reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
 
     mkdir -p ~/.secrets/certbot
     if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
@@ -185,10 +185,8 @@ get_certificates() {
 dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
 EOL
     else
-        # Если введен глобальный API ключ
-        reading "Введите ваш Cloudflare Email (для глобального API ключа):" CLOUDFLARE_GLOBAL_EMAIL
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
-dns_cloudflare_email = $CLOUDFLARE_GLOBAL_EMAIL
+dns_cloudflare_email = $CLOUDFLARE_EMAIL
 dns_cloudflare_api_key = $CLOUDFLARE_API_KEY
 EOL
     fi
