@@ -48,8 +48,9 @@ generate_password() {
 show_menu() {
     echo -e "${COLOR_GREEN}REMNAWAVE REVERSE-PROXY${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}1. Стандартная установка${COLOR_RESET}"
-	echo -e "${COLOR_YELLOW}2. Выбрать случайный шаблон для сайта${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}3. Выход${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}2. Переустановить панель${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}3. Выбрать случайный шаблон для сайта${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}4. Выход${COLOR_RESET}"
 }
 
 # Функция для извлечения домена из поддомена
@@ -908,14 +909,20 @@ case $OPTION in
         installation
         ;;
     2)
-        randomhtml
+        cd /root/remnawave
+	docker compose down -v --rmi all --remove-orphans
+ 	rm -rf /root/remnawave
+	installation
         ;;
     3)
+        randomhtml
+        ;;
+    4)
         echo -e "${COLOR_YELLOW}Выход.${COLOR_RESET}"
         exit 0
         ;;
     *)
-        echo -e "${COLOR_YELLOW}Неверный выбор. Пожалуйста, выберите опцию от 1 до 3.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}Неверный выбор. Пожалуйста, выберите опцию от 1 до 4.${COLOR_RESET}"
         exit 1
         ;;
 esac
