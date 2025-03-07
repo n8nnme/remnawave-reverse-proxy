@@ -179,7 +179,7 @@ get_certificates() {
 
     # Проверка API ключа через Cloudflare API
     get_test_response() {
-      if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
+      if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
           test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${CLOUDFLARE_API_KEY}" --header "Content-Type: application/json")
       else
           test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${CLOUDFLARE_API_KEY}" --header "X-Auth-Email: ${CLOUDFLARE_EMAIL}" --header "Content-Type: application/json")
