@@ -21,20 +21,14 @@ error() {
 check_os() {
     if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
     then
-        echo ""
-        echo -e "Error: only Debian 11/12 and Ubuntu 22.04/24.04 are supported"
-        echo ""
-        exit 1
+        error "Ошибка: Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
     fi
 }
 
 check_root() {
     if [[ $EUID -ne 0 ]]
     then
-        echo ""
-        echo -e "Error: this script should be run as root"
-        echo ""
-        exit 1
+        error "Ошибка: Скрипт нужно запускать с правами root"
     fi
 }
 
@@ -48,7 +42,7 @@ generate_password() {
 show_menu() {
     echo -e "${COLOR_GREEN}REMNAWAVE REVERSE-PROXY${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}1. Стандартная установка${COLOR_RESET}"
-	echo -e "${COLOR_YELLOW}2. Выбрать случайный шаблон для сайта${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}2. Выбрать случайный шаблон для сайта${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}3. Выход${COLOR_RESET}"
 }
 
@@ -76,7 +70,7 @@ check_certificates() {
 
 randomhtml() {
 # Переход в директорию /root/
-cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 1; }
+cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 0; }
 
 echo -e "${COLOR_YELLOW}Установка случайного шаблона для $DOMAIN${COLOR_RESET}"
 sleep 2
