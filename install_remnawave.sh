@@ -13,6 +13,10 @@ question() {
 reading() {
     read -rp " $(question "$1")" "$2"
 }
+error() {
+    echo -e "${COLOR_RED}$*\033[0m"
+    exit 1
+}
 
 check_os() {
     if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
@@ -190,8 +194,7 @@ get_certificates() {
       if echo "$test_response" | grep -q '"success":true'; then
           echo -e "${COLOR_GREEN}Cloudflare API ключ и email валидны.${COLOR_RESET}"
       else
-          echo -e "${COLOR_RED}Ошибка: Неверный Cloudflare API ключ или email.${COLOR_RESET}"
-          exit 1
+          error "Ошибка: Неверный Cloudflare API ключ или email."
       fi
     }
 
