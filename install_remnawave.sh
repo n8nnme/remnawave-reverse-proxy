@@ -176,16 +176,17 @@ get_certificates() {
 
     # Настройка Cloudflare API токена или глобального API ключа
     reading "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:" CLOUDFLARE_API_KEY
+    reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
+
     mkdir -p ~/.secrets/certbot
     if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
         # Если введен API токен
-	reading "Введите ваш Cloudflare Email (для глобального API ключа):" CLOUDFLARE_GLOBAL_EMAIL
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
 dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
 EOL
     else
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
-dns_cloudflare_email = $CLOUDFLARE_GLOBAL_EMAIL
+dns_cloudflare_email = $CLOUDFLARE_EMAIL
 dns_cloudflare_api_key = $CLOUDFLARE_API_KEY
 EOL
     fi
@@ -201,6 +202,8 @@ EOL
       -d $WILDCARD_DOMAIN \
       --email $CLOUDFLARE_GLOBAL_EMAIL \
       --agree-tos \
+      --cert-name $DOMAIN \
+      --no-eff-email \
       --non-interactive \
       --key-type ecdsa \
       --elliptic-curve secp384r1
