@@ -566,7 +566,6 @@ installation() {
 	# Проверка ответа
 	if [ -z "$response" ]; then
 		echo "Ошибка: Пустой ответ от сервера."
-		exit 1
 	fi
 
 	# Извлечение токена из ответа
@@ -574,8 +573,6 @@ installation() {
 
 	if [ -z "$token" ]; then
 		echo "Ошибка: Не удалось извлечь токен из ответа."
-		#echo "Ответ сервера: $response"
-		exit 1
 	fi
 
 	# Запись токена в файл
@@ -590,7 +587,6 @@ installation() {
 		token=$(cat token.txt)
 	else
 		echo "Ошибка: Файл token.txt не найден."
-		exit 1
 	fi
 
 	# Выполнение GET-запроса для получения публичного ключа
@@ -604,15 +600,12 @@ api_response=$(curl -s -X GET "http://$domain_url/api/keygen/get" \
 	# Проверка ответа
 	if [ -z "$api_response" ]; then
 		echo "Ошибка: Пустой ответ от сервера."
-		exit 1
 	fi
 
 	# Извлечение публичного ключа из ответа
 	pubkey=$(echo "$api_response" | jq -r '.response.pubKey')
-
 	if [ -z "$pubkey" ]; then
 		echo "Ошибка: Не удалось извлечь публичный ключ из ответа."
-		exit 1
 	fi
 
 	# Вывод публичного ключа
@@ -620,7 +613,6 @@ api_response=$(curl -s -X GET "http://$domain_url/api/keygen/get" \
 
 	# Создание файла .env-node в целевой директории
 	env_node_file="$target_dir/.env-node"
-
 	cat > "$env_node_file" <<EOL
 ### APP ###
 APP_PORT=2222
@@ -646,7 +638,6 @@ EOL
 
 	# Генерация shortID
 	short_id=$(openssl rand -hex 8)
-
 	cat > "$target_dir/config.json" <<EOL
 {
   "log": {
@@ -730,10 +721,9 @@ EOL
 	# Обновление конфигурации Xray
 	echo -e "${COLOR_YELLOW}Обновление конфигурации Xray...${COLOR_RESET}"
 	sleep 1
-
+ 
 	# Чтение конфигурации из файла
 	NEW_CONFIG=$(cat "$config_file")
-
 	# Выполнение POST-запроса для обновления конфигурации Xray
 update_response=$(curl -s -X POST "http://$domain_url/api/xray/update-config" \
   -H "Authorization: Bearer $token" \
@@ -748,15 +738,12 @@ update_response=$(curl -s -X POST "http://$domain_url/api/xray/update-config" \
 		echo "Ошибка: Пустой ответ от сервера при обновлении конфигурации."
 		exit 1
 	fi
-
 	# Проверка успешности обновления
 	if echo "$update_response" | jq -e '.response.config' > /dev/null; then
 		echo -e "${COLOR_YELLOW}Конфигурация Xray успешно обновлена.${COLOR_RESET}"
 		sleep 1
 	else
 		echo "Ошибка: Не удалось обновить конфигурацию Xray."
-		echo "Ответ сервера: $update_response"
-		exit 1
 	fi
 
 	# Создание нового узла
@@ -779,7 +766,6 @@ update_response=$(curl -s -X POST "http://$domain_url/api/xray/update-config" \
 }
 EOF
 )
-
 	# Выполнение POST-запроса для создания узла
 node_response=$(curl -s -X POST "http://$domain_url/api/nodes/create" \
   -H "Authorization: Bearer $token" \
@@ -788,52 +774,37 @@ node_response=$(curl -s -X POST "http://$domain_url/api/nodes/create" \
   -H "X-Forwarded-For: $domain_url" \
   -H "X-Forwarded-Proto: https" \
   -d "$NEW_NODE_DATA")
-
 	# Проверка ответа
 	if [ -z "$node_response" ]; then
 		echo "Ошибка: Пустой ответ от сервера при создании узла."
-		exit 1
 	fi
-
 	# Проверка успешности создания узла
 	if echo "$node_response" | jq -e '.response.uuid' > /dev/null; then
 		echo -e "${COLOR_YELLOW}Узел успешно создан.${COLOR_RESET}"
-		#echo "Ответ сервера: $node_response"
 	else
 		echo "Ошибка: Не удалось создать узел."
-		echo "Ответ сервера: $node_response"
-		#exit 1
 	fi
-
 	# Получение списка inbounds
-	#echo "Получаем список inbounds..."
 inbounds_response=$(curl -s -X GET "http://$domain_url/api/inbounds" \
   -H "Authorization: Bearer $token" \
   -H "Content-Type: application/json" \
   -H "Host: $PANEL_DOMAIN" \
   -H "X-Forwarded-For: $domain_url" \
   -H "X-Forwarded-Proto: https")
-
 	# Проверка ответа
 	if [ -z "$inbounds_response" ]; then
 		echo "Ошибка: Пустой ответ от сервера при получении inbounds."
 		#exit 1
 	fi
-
 	# Извлечение UUID первого inbound
 	inbound_uuid=$(echo "$inbounds_response" | jq -r '.response[0].uuid')
-
 	if [ -z "$inbound_uuid" ]; then
 		echo "Ошибка: Не удалось извлечь UUID из ответа."
 		echo "Ответ сервера: $inbounds_response"
 		exit 1
 	fi
-
-	#echo "UUID входящего соединения (inbound): $inbound_uuid"
-
 	# Создание хоста
 	echo -e "${COLOR_YELLOW}Создаем хост с UUID: $inbound_uuid...${COLOR_RESET}"
-
 	host_data=$(cat <<EOF
 {
   "inboundUuid": "$inbound_uuid",
@@ -866,7 +837,7 @@ host_response=$(curl -s -X POST "http://$domain_url/api/hosts/create" \
 		#exit 1
 	fi
 
-# Проверка успешности создания хоста
+	# Проверка успешности создания хоста
 	if echo "$host_response" | jq -e '.response.uuid' > /dev/null; then
 		echo -e "${COLOR_YELLOW}Хост успешно создан.${COLOR_RESET}"
 		#echo "Ответ сервера: $host_response"
@@ -879,20 +850,16 @@ host_response=$(curl -s -X POST "http://$domain_url/api/hosts/create" \
 	echo -e "${COLOR_YELLOW}Остановка Remnawave${COLOR_RESET}"
 	docker compose down
 	sleep 10
-    echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
-    docker compose up -d
+    	echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
+    	docker compose up -d
 	sleep 10
-	
-	#Установка случайного шаблона
-	randomhtml
- 
 	wget -O /root/install_remnawave.sh https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh
  	ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
 	chmod +x install_remnawave.sh
-    #Очистка экрана
-    clear
+    	
+    	clear
 
-    # Вывод итоговой информации
+    	# Вывод итоговой информации
 	echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
 	echo -e "${COLOR_YELLOW}               УСТАНОВКА ЗАВЕРШЕНА!${COLOR_RESET}"
 	echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
@@ -906,6 +873,9 @@ host_response=$(curl -s -X POST "http://$domain_url/api/hosts/create" \
 	echo -e "${COLOR_YELLOW}Чтобы заново вызвать скрипт, используйте команду:${COLOR_RESET}"
 	echo -e "${COLOR_WHITE}remnawave_reverse${COLOR_RESET}"
 	echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
+
+ 	#Установка случайного шаблона
+	randomhtml
 }
 
 # Проверка, установлены ли пакеты
@@ -915,14 +885,9 @@ fi
 
 check_os
 check_root
-
-# Показать меню
 show_menu
-
-# Запросить выбор пользователя
 reading "Выберите действие (1-3):" OPTION
 
-# Обработать выбор
 case $OPTION in
     1)
         installation
@@ -939,5 +904,4 @@ case $OPTION in
         exit 1
         ;;
 esac
-# Завершить скрипт после выполнения выбранной опции
 exit 0
