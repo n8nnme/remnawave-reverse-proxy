@@ -185,19 +185,31 @@ get_certificates() {
     reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
 
     # Проверка API ключа через Cloudflare API
-    get_test_response() {
-      if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
-          test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${CLOUDFLARE_API_KEY}" --header "Content-Type: application/json")
-      else
-          test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${CLOUDFLARE_API_KEY}" --header "X-Auth-Email: ${CLOUDFLARE_EMAIL}" --header "Content-Type: application/json")
-      fi
+get_test_response() {
+  local attempts=3
+  local attempt=1
 
-      if echo "$test_response" | grep -q '"success":true'; then
-          echo -e "${COLOR_GREEN}Cloudflare API ключ и email валидны.${COLOR_RESET}"
-      else
-          error "Ошибка: Неверный Cloudflare API ключ или email."
+  while [ $attempt -le $attempts ]; do
+    if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
+      test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${CLOUDFLARE_API_KEY}" --header "Content-Type: application/json")
+    else
+      test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${CLOUDFLARE_API_KEY}" --header "X-Auth-Email: ${CLOUDFLARE_EMAIL}" --header "Content-Type: application/json")
+    fi
+
+    if echo "$test_response" | grep -q '"success":true'; then
+      echo -e "${COLOR_GREEN}Cloudflare API ключ и email валидны.${COLOR_RESET}"
+      return 0
+    else
+      echo -e "${COLOR_RED}Ошибка: Неверный Cloudflare API ключ или email. Попытка $attempt из $attempts.${COLOR_RESET}"
+      if [ $attempt -lt $attempts ]; then
+        read -p "Пожалуйста, введите ваш Cloudflare API ключ: " CLOUDFLARE_API_KEY
+        read -p "Пожалуйста, введите ваш Cloudflare email: " CLOUDFLARE_EMAIL
       fi
-    }
+      attempt=$((attempt + 1))
+    fi
+  done
+  error "Ошибка: Неверный Cloudflare API ключ или email после $attempts попыток."
+}
 
     get_test_response
 
