@@ -202,7 +202,7 @@ get_certificates() {
     get_test_response
 
     mkdir -p ~/.secrets/certbot
-    if [[ $CLOUDFLARE_API_KEY =~ [a-zA-Z0-9]{40} ]]; then
+    if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
         # Если введен API токен
         cat > ~/.secrets/certbot/cloudflare.ini <<EOL
 dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
