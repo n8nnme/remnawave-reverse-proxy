@@ -75,9 +75,6 @@ check_certificates() {
     return 1 
 }
 
-###################################
-### Cron rules
-###################################
 add_cron_rule() {
   local rule="$1"
   local logged_rule="${rule} >> /var/log/cron_jobs.log 2>&1"
