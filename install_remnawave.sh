@@ -75,6 +75,16 @@ check_certificates() {
     return 1 
 }
 
+###################################
+### Cron rules
+###################################
+add_cron_rule() {
+  local rule="$1"
+  local logged_rule="${rule} >> /var/log/cron_jobs.log 2>&1"
+
+  ( crontab -l | grep -Fxq "$logged_rule" ) || ( crontab -l 2>/dev/null; echo "$logged_rule" ) | crontab -
+}
+
 randomhtml() {
 # Переход в директорию /root/
 cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 1; }
@@ -243,9 +253,8 @@ EOL
       --elliptic-curve secp384r1
 
     # Добавление cron-задачи для автоматического обновления сертификатов
-    CRON_JOB="0 5 1 */2 * /usr/bin/certbot renew --quiet"
     echo "renew_hook = sh -c 'cd /root/remnawave && docker compose exec remnawave-nginx nginx -s reload'" >> /etc/letsencrypt/renewal/$DOMAIN.conf
-    (crontab -l 2>/dev/null | grep -v "/usr/bin/certbot renew"; echo "$CRON_JOB") | crontab -
+    add_cron_rule "0 5 1 */2 * /usr/bin/certbot renew --quiet"
 }
 
 # Функция для установки панели
