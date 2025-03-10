@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR_REMNAWAVE="/usr/local/remnawave_reverse/"
+SCRIPT_URL="https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh"
 
 COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
@@ -31,6 +32,13 @@ log_entry() {
   mkdir -p ${DIR_REMNAWAVE}
   LOGFILE="${DIR_REMNAWAVE}remnawave_reverse.log"
   exec > >(tee -a "$LOGFILE") 2>&1
+}
+
+update_remnawave_reverse() {
+  UPDATE_SCRIPT="${DIR_REMNAWAVE}remnawave_reverse"
+  wget -O $UPDATE_SCRIPT $SCRIPT_URL
+  ln -sf $UPDATE_SCRIPT /usr/local/bin/remnawave_reverse
+  chmod +x "$UPDATE_SCRIPT"
 }
 
 check_root() {
@@ -830,6 +838,7 @@ EOF
 }
 
 log_entry
+update_remnawave_reverse
 check_os
 check_root
 show_menu
