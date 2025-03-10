@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR_REMNAWAVE="/usr/local/remnawave_reverse/"
+
 COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
 COLOR_YELLOW="\033[1;33m"
@@ -23,6 +25,12 @@ check_os() {
     if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release; then
         error "Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
     fi
+}
+
+log_entry() {
+  mkdir -p ${DIR_REMNAWAVE}
+  LOGFILE="${DIR_REMNAWAVE}remnawave_reverse.log"
+  exec > >(tee -a "$LOGFILE") 2>&1
 }
 
 check_root() {
@@ -152,7 +160,7 @@ install_packages() {
     ufw allow 22/tcp comment 'SSH'
     ufw allow 443/tcp comment 'HTTPS'
     ufw --force enable
-    touch /usr/local/bin/install_packages
+    touch ${DIR_REMNAWAVE}install_packages
     clear
 }
 
@@ -821,6 +829,7 @@ EOF
     randomhtml
 }
 
+log_entry
 check_os
 check_root
 show_menu
