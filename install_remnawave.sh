@@ -36,7 +36,7 @@ log_entry() {
 
 update_remnawave_reverse() {
   UPDATE_SCRIPT="${DIR_REMNAWAVE}remnawave_reverse"
-  wget -O $UPDATE_SCRIPT $SCRIPT_URL
+  wget -q -O $UPDATE_SCRIPT $SCRIPT_URL
   ln -sf $UPDATE_SCRIPT /usr/local/bin/remnawave_reverse
   chmod +x "$UPDATE_SCRIPT"
 }
