@@ -28,6 +28,10 @@ check_os() {
     fi
 }
 
+log_clear() {
+  sed -i -e 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$LOGFILE"
+}
+
 log_entry() {
   mkdir -p ${DIR_REMNAWAVE}
   LOGFILE="${DIR_REMNAWAVE}remnawave_reverse.log"
@@ -876,15 +880,18 @@ case $OPTION in
 	    install_packages
 	fi
 	installation
+ 	log_clear
         ;;
     2)
         cd /root/remnawave
         docker compose down -v --rmi all --remove-orphans
         rm -rf /root/remnawave
         installation
+	log_clear
         ;;
     3)
         randomhtml
+	log_clear
         ;;
     4)
         echo -e "${COLOR_YELLOW}Выход.${COLOR_RESET}"
