@@ -755,7 +755,6 @@ EOF
     if [ -z "$inbound_uuid" ]; then
         echo "Ошибка: Не удалось извлечь UUID из ответа."
     fi
-
 	echo -e "${COLOR_YELLOW}Создаем хост с UUID: $inbound_uuid...${COLOR_RESET}"
     host_data=$(cat <<EOF
 {
@@ -787,7 +786,7 @@ EOF
     fi
 
     if echo "$host_response" | jq -e '.response.uuid' > /dev/null; then
-        echo -e "${COLOR_YELLOW}Хост успешно создан.${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}Хост успешно создан.${COLOR_RESET}"
     else
         echo "Ошибка: Не удалось создать хост."
     fi
@@ -822,10 +821,6 @@ EOF
     randomhtml
 }
 
-#if [ ! -f /usr/local/bin/install_packages ]; then
-#    install_packages
-#fi
-
 check_os
 check_root
 show_menu
@@ -834,9 +829,9 @@ reading "Выберите действие (1-4):" OPTION
 case $OPTION in
     1)
         if [ ! -f /usr/local/bin/install_packages ]; then
-			install_packages
-		fi
-		installation
+	    install_packages
+	fi
+	installation
         ;;
     2)
         cd /root/remnawave
