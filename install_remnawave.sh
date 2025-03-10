@@ -846,7 +846,7 @@ reading "Выберите действие (1-4):" OPTION
 
 case $OPTION in
     1)
-        if [ ! -f /usr/local/bin/install_packages ]; then
+        if [ ! -f ${DIR_REMNAWAVE}install_packages ]; then
 	    install_packages
 	fi
 	installation
