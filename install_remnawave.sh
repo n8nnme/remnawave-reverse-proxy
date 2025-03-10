@@ -84,11 +84,36 @@ add_cron_rule() {
     ( crontab -l | grep -Fxq "$logged_rule" ) || ( crontab -l 2>/dev/null; echo "$logged_rule" ) | crontab -
 }
 
+spinner() {
+  local pid=$1
+  local text=$2
+
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+
+  local spinstr='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+  local text_code="$COLOR_GREEN"
+  local bg_code=""  # Без фона
+  local effect_code="\033[1m" # Жирный
+  local delay=0.1
+  local reset_code="$COLOR_RESET"
+
+  while kill -0 "$pid" 2>/dev/null; do
+    for (( i=0; i<${#spinstr}; i++ )); do
+      printf " ${effect_code}${text_code}${bg_code}[%s] %s${reset_code}" "$(echo -n "${spinstr:$i:1}")" "$text" > /dev/tty
+      sleep $delay
+      printf "\r\033[K" > /dev/tty
+    done
+  done
+  printf "\r\033[K" > /dev/tty
+}
+
 randomhtml() {
     cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 1; }
 
     echo -e "${COLOR_YELLOW}Установка случайного шаблона для $DOMAIN${COLOR_RESET}"
-    sleep 2
+    spinner $$ "Пожалуйста, подождите... " &
+    spinner_pid=$!
 
     while ! wget -q --show-progress --timeout=30 --tries=10 --retry-connrefused "https://github.com/cortez24rus/xui-rp-web/archive/refs/heads/main.zip"; do
         echo "Скачивание не удалось, пробуем снова..."
@@ -103,6 +128,11 @@ randomhtml() {
     rm -rf assets ".gitattributes" "README.md" "_config.yml"
 
     RandomHTML=$(for i in *; do echo "$i"; done | shuf -n1 2>&1)
+    
+    kill "$spinner_pid" 2>/dev/null
+    wait "$spinner_pid" 2>/dev/null
+    printf "\r\033[K" > /dev/tty
+    
     echo "Выбран случайный шаблон: ${RandomHTML}"
 
     if [[ -d "${RandomHTML}" && -d "/var/www/html/" ]]; then
@@ -545,11 +575,10 @@ installation() {
     echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
     sleep 1
     cd /root/remnawave
-    docker compose up -d
-
-    echo -e "${COLOR_YELLOW}Ожидаем завершения запуска...${COLOR_RESET}"
-    sleep 15
-
+    docker compose up -d > /dev/null 2>&1 &
+    
+    spinner $! "Пожалуйста, подождите... "
+    
     domain_url="127.0.0.1:3000"
     node_url="$DOMAIN"
     username="$SUPERADMIN_USERNAME"
@@ -560,7 +589,7 @@ installation() {
     hashed_password=$(echo -n "$password" | md5sum | awk '{print $1}')
 
     echo -e "${COLOR_YELLOW}Выполняем запрос к API для получения токена...${COLOR_RESET}"
-    sleep 1
+    sleep 10
     response=$(curl -s -X POST "http://$domain_url/api/auth/login" \
         -d "username=$username&password=$hashed_password" \
         -H "Host: $PANEL_DOMAIN" \
@@ -814,9 +843,6 @@ EOF
     echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
     docker compose up -d
     sleep 10
-    wget -O /root/install_remnawave.sh https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh
-    ln -s /root/install_remnawave.sh /usr/local/bin/remnawave_reverse
-    chmod +x install_remnawave.sh
 
     clear
 
