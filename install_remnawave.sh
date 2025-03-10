@@ -115,7 +115,7 @@ randomhtml() {
     spinner $$ "Пожалуйста, подождите... " &
     spinner_pid=$!
 
-    while ! wget -q --show-progress --timeout=30 --tries=10 --retry-connrefused "https://github.com/cortez24rus/xui-rp-web/archive/refs/heads/main.zip"; do
+    while ! wget -q --timeout=30 --tries=10 --retry-connrefused "https://github.com/cortez24rus/xui-rp-web/archive/refs/heads/main.zip"; do
         echo "Скачивание не удалось, пробуем снова..."
         sleep 3
     done
