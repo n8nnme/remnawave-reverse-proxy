@@ -21,14 +21,14 @@ set_language() {
         en)
             LANG=(
                 #Lang
-				[CHOOSE_LANG]="Select language:"
+		[CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
-				[ERROR_ROOT]="Script must be run as root"
+		[ERROR_ROOT]="Script must be run as root"
                 [ERROR_OS]="Supported only Debian 11/12 and Ubuntu 22.04/24.04"
                 #Menu
-				[MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
+		[MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
                 [MENU_1]="Standard installation"
                 [MENU_2]="Reinstall panel"
                 [MENU_3]="Select random site template"
@@ -37,49 +37,49 @@ set_language() {
                 [INVALID_CHOICE]="Invalid choice. Please select 1-4."
                 [EXITING]="Exiting"
                 #Remna
-				[INSTALL_PACKAGES]="Installing required packages..."
-				[INSTALLING1]="Installing Remnawave"
-				[ENTER_PANEL_DOMAIN]="Enter panel domain (e.g. panel.example.com):"
+		[INSTALL_PACKAGES]="Installing required packages..."
+		[INSTALLING1]="Installing Remnawave"
+		[ENTER_PANEL_DOMAIN]="Enter panel domain (e.g. panel.example.com):"
                 [ENTER_SUB_DOMAIN]="Enter subscription domain (e.g. sub.example.com):"
                 [ENTER_CF_TOKEN]="Enter your Cloudflare API token or global API key:"
                 [ENTER_CF_EMAIL]="Enter your Cloudflare registered email:"
-				[CHECK_CERTS]="Checking certificates..."
-				[CERT_EXIST1]="Certificates found in /etc/letsencrypt/live/"
+		[CHECK_CERTS]="Checking certificates..."
+		[CERT_EXIST1]="Certificates found in /etc/letsencrypt/live/"
                 [CERT_EXIST]="Using existing certificates"
                 [CF_VALIDATING]="Cloudflare API key and email are valid"
                 [CF_INVALID]="Invalid Cloudflare API token or email after %d attempts."
-				[CF_INVALID_ATTEMPT]="Invalid Cloudflare API key or email. Attempt %d of %d."
+		[CF_INVALID_ATTEMPT]="Invalid Cloudflare API key or email. Attempt %d of %d."
                 [CERT_MISSING]="Certificates not found. Obtaining new ones..."
-				[CONFIG_JSON]="Configuring remnawave-json..."
-				[INSTALLING]="Please wait..."
-				#API
-				[REQUEST_API_TOKEN]="Requesting API token..."
-				[GET_PUBLIC_KEY]="Getting public key..."
+		[CONFIG_JSON]="Configuring remnawave-json..."
+		[INSTALLING]="Please wait..."
+		#API
+		[REQUEST_API_TOKEN]="Requesting API token..."
+		[GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
-				[GENERATE_KEYS]="Generating x25519 keys..."
-				[UPDATING_XRAY_CONFIG]="Updating Xray configuration..."
+		[GENERATE_KEYS]="Generating x25519 keys..."
+		[UPDATING_XRAY_CONFIG]="Updating Xray configuration..."
                 [XRAY_CONFIG_UPDATED]="Xray configuration successfully updated."
                 [NODE_CREATED]="Node successfully created."
                 [CREATE_HOST]="Creating host with UUID:"
                 [HOST_CREATED]="Host successfully created."
-				#Stop/Start
+		#Stop/Start
                 [STARTING_REMNAWAVE]="Starting Remnawave"
-				[STOPPING_REMNAWAVE]="Stopping Remnawave"
-				#Menu end
-				[INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
-				[PANEL_ACCESS]="Panel URL:"
+		[STOPPING_REMNAWAVE]="Stopping Remnawave"
+		#Menu end
+		[INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
+		[PANEL_ACCESS]="Panel URL:"
                 [ADMIN_CREDS]="To log into the panel, use the following data:"
                 [USERNAME]="Username:"
                 [PASSWORD]="Password:"
                 [RELAUNCH_CMD]="To relaunch script use command:"
-				#RandomHTML
-				[RANDOM_TEMPLATE]="Installing random template for"
+		#RandomHTML
+		[RANDOM_TEMPLATE]="Installing random template for"
                 [DOWNLOAD_FAIL]="Download failed, retrying..."
                 [UNPACK_ERROR]="Error unpacking archive"
                 [TEMPLATE_COPY]="Template copied to /var/www/html/"
                 [SELECT_TEMPLATE]="Selected template:"
-				#Error
-				[ERROR_TOKEN]="Failed to get token."
+		#Error
+		[ERROR_TOKEN]="Failed to get token."
                 [ERROR_EXTRACT_TOKEN]="Failed to extract token from response."
                 [ERROR_PUBLIC_KEY]="Failed to get public key."
                 [ERROR_EXTRACT_PUBLIC_KEY]="Failed to extract public key from response."
@@ -107,31 +107,31 @@ set_language() {
                 [INVALID_CHOICE]="Неверный выбор. Выберите 1-4."
                 [EXITING]="Выход"
                 [INSTALL_PACKAGES]="Установка необходимых пакетов..."
-				[INSTALLING1]="Установка Remnawave"
-				[ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
+		[INSTALLING1]="Установка Remnawave"
+		[ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
                 [ENTER_SUB_DOMAIN]="Введите домен подписки (например, sub.example.com):"
                 [ENTER_CF_TOKEN]="Введите Cloudflare API токен или глобальный ключ:"
                 [ENTER_CF_EMAIL]="Введите зарегистрированную почту Cloudflare:"
-				[CHECK_CERTS]="Проверка сертификатов..."
-				[CERT_EXIST1]="Сертификаты найдены в /etc/letsencrypt/live/"
-				[CERT_EXIST]="Используем существующие сертификаты"
+		[CHECK_CERTS]="Проверка сертификатов..."
+		[CERT_EXIST1]="Сертификаты найдены в /etc/letsencrypt/live/"
+		[CERT_EXIST]="Используем существующие сертификаты"
                 [CF_VALIDATING]="Cloudflare API ключ и email валидны"
                 [CF_INVALID]="Неверный Cloudflare API ключ или email после %d попыток."
-				[CF_INVALID_ATTEMPT]="Неверный Cloudflare API ключ или email. Попытка %d из %d."
+		[CF_INVALID_ATTEMPT]="Неверный Cloudflare API ключ или email. Попытка %d из %d."
                 [CERT_MISSING]="Сертификаты не найдены. Получаем новые..."
-				[CONFIG_JSON]="Настройка remnawave-json..."
-				[INSTALLING]="Пожалуйста, подождите..."
-				[REQUEST_API_TOKEN]="Выполняем запрос к API для получения токена..."
-				[GET_PUBLIC_KEY]="Получаем публичный ключ..."
+		[CONFIG_JSON]="Настройка remnawave-json..."
+		[INSTALLING]="Пожалуйста, подождите..."
+		[REQUEST_API_TOKEN]="Выполняем запрос к API для получения токена..."
+		[GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
-				[GENERATE_KEYS]="Генерация ключей x25519..."
-				[UPDATING_XRAY_CONFIG]="Обновление конфигурации Xray..."
+		[GENERATE_KEYS]="Генерация ключей x25519..."
+		[UPDATING_XRAY_CONFIG]="Обновление конфигурации Xray..."
                 [XRAY_CONFIG_UPDATED]="Конфигурация Xray успешно обновлена."
                 [NODE_CREATED]="Узел успешно создан."
                 [CREATE_HOST]="Создаем хост с UUID:"
                 [HOST_CREATED]="Хост успешно создан."
                 [STOPPING_REMNAWAVE]="Остановка Remnawave"
-				[STARTING_REMNAWAVE]="Запуск Remnawave"
+		[STARTING_REMNAWAVE]="Запуск Remnawave"
                 [INSTALL_COMPLETE]="               УСТАНОВКА ЗАВЕРШЕНА!"
                 [PANEL_ACCESS]="Панель доступна по адресу:"
                 [ADMIN_CREDS]="Для входа в панель используйте следующие данные:"
@@ -140,11 +140,11 @@ set_language() {
                 [RELAUNCH_CMD]="Для повторного запуска:"
                 [DOWNLOAD_FAIL]="Ошибка загрузки, повторная попытка..."
                 [UNPACK_ERROR]="Ошибка распаковки архива"
-				[RANDOM_TEMPLATE]="Установка случайного шаблона для"
+		[RANDOM_TEMPLATE]="Установка случайного шаблона для"
                 [TEMPLATE_COPY]="Шаблон скопирован в /var/www/html/"
                 [SELECT_TEMPLATE]="Выбран шаблон:"
-				#Error
-				[ERROR_TOKEN]="Не удалось получить токен."
+		#Error
+		[ERROR_TOKEN]="Не удалось получить токен."
                 [ERROR_EXTRACT_TOKEN]="Не удалось извлечь токен из ответа."
                 [ERROR_PUBLIC_KEY]="Не удалось получить публичный ключ."
                 [ERROR_EXTRACT_PUBLIC_KEY]="Не удалось извлечь публичный ключ из ответа."
@@ -211,20 +211,20 @@ generate_password() {
 
 show_language() {
     echo -e "${COLOR_GREEN}${LANG[CHOOSE_LANG]}${COLOR_RESET}"
-	echo -e ""
-	echo -e "${COLOR_YELLOW}1. ${LANG[LANG_EN]}${COLOR_RESET}"
+    echo -e ""
+    echo -e "${COLOR_YELLOW}1. ${LANG[LANG_EN]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}2. ${LANG[LANG_RU]}${COLOR_RESET}"
-	echo -e ""
+    echo -e ""
 }
 
 show_menu() {
     echo -e "${COLOR_GREEN}${LANG[MENU_TITLE]}${COLOR_RESET}"
-	echo -e ""
+    echo -e ""
     echo -e "${COLOR_YELLOW}1. ${LANG[MENU_1]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}2. ${LANG[MENU_2]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}3. ${LANG[MENU_3]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}4. ${LANG[MENU_4]}${COLOR_RESET}"
-	echo -e ""
+    echo -e ""
 }
 
 extract_domain() {
@@ -438,7 +438,7 @@ install_remnawave() {
     mkdir -p ~/remnawave && cd ~/remnawave
 
     reading "${LANG[ENTER_PANEL_DOMAIN]}" PANEL_DOMAIN
-	reading "${LANG[ENTER_SUB_DOMAIN]}" SUB_DOMAIN
+    reading "${LANG[ENTER_SUB_DOMAIN]}" SUB_DOMAIN
 
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
@@ -804,8 +804,8 @@ EOL
     public_key=$(echo "$keys" | grep "Public key:" | awk '{print $3}')
 	
 	if [ -z "$private_key" ] || [ -z "$public_key" ]; then
-        echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
-    fi
+            echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
+	fi
 
     short_id=$(openssl rand -hex 8)
     cat > "$target_dir/config.json" <<EOL
@@ -932,7 +932,7 @@ EOF
         -H "X-Forwarded-Proto: https" \
         -d "$NEW_NODE_DATA")
 		
-	if [ -z "$node_response" ]; then
+    if [ -z "$node_response" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_NODE]}${COLOR_RESET}"
     fi
 
@@ -949,13 +949,13 @@ EOF
         -H "X-Forwarded-For: $domain_url" \
         -H "X-Forwarded-Proto: https")
 		
-	if [ -z "$inbounds_response" ]; then
+    if [ -z "$inbounds_response" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_INBOUNDS]}${COLOR_RESET}"
     fi
 
     inbound_uuid=$(echo "$inbounds_response" | jq -r '.response[0].uuid')
 	
-	if [ -z "$inbound_uuid" ]; then
+    if [ -z "$inbound_uuid" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_EXTRACT_UUID]}${COLOR_RESET}"
     fi
 	echo -e "${COLOR_YELLOW}${LANG[CREATE_HOST]}$inbound_uuid${COLOR_RESET}"
@@ -985,7 +985,7 @@ EOF
         -H "X-Forwarded-Proto: https" \
         -d "$host_data")
 		
-	if [ -z "$host_response" ]; then
+    if [ -z "$host_response" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_HOST]}${COLOR_RESET}"
     fi
 
@@ -998,20 +998,20 @@ EOF
 	
     echo -e "${COLOR_YELLOW}${LANG[STOPPING_REMNAWAVE]}${COLOR_RESET}"
     sleep 1
-	docker compose down > /dev/null 2>&1 &
-	spinner $! "${LANG[INSTALLING]}"
+    docker compose down > /dev/null 2>&1 &
+    spinner $! "${LANG[INSTALLING]}"
 	
-	echo -e "${COLOR_YELLOW}${LANG[STARTING_REMNAWAVE]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[STARTING_REMNAWAVE]}${COLOR_RESET}"
     sleep 1
-	docker compose up -d > /dev/null 2>&1 &
-	spinner $! "${LANG[INSTALLING]}"
+    docker compose up -d > /dev/null 2>&1 &
+    spinner $! "${LANG[INSTALLING]}"
 
     clear
 
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}${LANG[INSTALL_COMPLETE]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
-	echo -e "${COLOR_YELLOW}${LANG[PANEL_ACCESS]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[PANEL_ACCESS]}${COLOR_RESET}"
     echo -e "${COLOR_WHITE}https://$PANEL_DOMAIN${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}-------------------------------------------------${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}${LANG[ADMIN_CREDS]}${COLOR_RESET}"
