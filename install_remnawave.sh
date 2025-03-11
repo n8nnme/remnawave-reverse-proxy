@@ -9,6 +9,159 @@ COLOR_YELLOW="\033[1;33m"
 COLOR_WHITE="\033[1;37m"
 COLOR_RED="\033[1;31m"
 
+# Language variables
+declare -A LANG=(
+    [CHOOSE_LANG]="Select language:"
+    [LANG_EN]="English"
+    [LANG_RU]="Russian"
+)
+
+set_language() {
+    case $1 in
+        en)
+            LANG=(
+                #Lang
+				[CHOOSE_LANG]="Select language:"
+                [LANG_EN]="English"
+                [LANG_RU]="Russian"
+                #check
+				[ERROR_ROOT]="Script must be run as root"
+                [ERROR_OS]="Supported only Debian 11/12 and Ubuntu 22.04/24.04"
+                #Menu
+				[MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
+                [MENU_1]="Standard installation"
+                [MENU_2]="Reinstall panel"
+                [MENU_3]="Select random site template"
+                [MENU_4]="Exit"
+                [PROMPT_ACTION]="Select action (1-4):"
+                [INVALID_CHOICE]="Invalid choice. Please select 1-4."
+                [EXITING]="Exiting"
+                #Remna
+				[INSTALL_PACKAGES]="Installing required packages..."
+				[INSTALLING1]="Installing Remnawave"
+				[ENTER_PANEL_DOMAIN]="Enter panel domain (e.g. panel.example.com):"
+                [ENTER_SUB_DOMAIN]="Enter subscription domain (e.g. sub.example.com):"
+                [ENTER_CF_TOKEN]="Enter your Cloudflare API token or global API key:"
+                [ENTER_CF_EMAIL]="Enter your Cloudflare registered email:"
+				[CHECK_CERTS]="Checking certificates..."
+				[CERT_EXIST1]="Certificates found in /etc/letsencrypt/live/"
+                [CERT_EXIST]="Using existing certificates"
+                [CF_VALIDATING]="Cloudflare API key and email are valid"
+                [CF_INVALID]="Invalid Cloudflare API token or email after %d attempts."
+				[CF_INVALID_ATTEMPT]="Invalid Cloudflare API key or email. Attempt %d of %d."
+                [CERT_MISSING]="Certificates not found. Obtaining new ones..."
+				[CONFIG_JSON]="Configuring remnawave-json..."
+				[INSTALLING]="Please wait..."
+				#API
+				[REQUEST_API_TOKEN]="Requesting API token..."
+				[GET_PUBLIC_KEY]="Getting public key..."
+                [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
+				[GENERATE_KEYS]="Generating x25519 keys..."
+				[UPDATING_XRAY_CONFIG]="Updating Xray configuration..."
+                [XRAY_CONFIG_UPDATED]="Xray configuration successfully updated."
+                [NODE_CREATED]="Node successfully created."
+                [CREATE_HOST]="Creating host with UUID:"
+                [HOST_CREATED]="Host successfully created."
+				#Stop/Start
+                [STARTING_REMNAWAVE]="Starting Remnawave"
+				[STOPPING_REMNAWAVE]="Stopping Remnawave"
+				#Menu end
+				[INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
+				[PANEL_ACCESS]="Panel URL:"
+                [ADMIN_CREDS]="To log into the panel, use the following data:"
+                [USERNAME]="Username:"
+                [PASSWORD]="Password:"
+                [RELAUNCH_CMD]="To relaunch script use command:"
+				#RandomHTML
+				[RANDOM_TEMPLATE]="Installing random template for"
+                [DOWNLOAD_FAIL]="Download failed, retrying..."
+                [UNPACK_ERROR]="Error unpacking archive"
+                [TEMPLATE_COPY]="Template copied to /var/www/html/"
+                [SELECT_TEMPLATE]="Selected template:"
+				#Error
+				[ERROR_TOKEN]="Failed to get token."
+                [ERROR_EXTRACT_TOKEN]="Failed to extract token from response."
+                [ERROR_PUBLIC_KEY]="Failed to get public key."
+                [ERROR_EXTRACT_PUBLIC_KEY]="Failed to extract public key from response."
+                [ERROR_GENERATE_KEYS]="Failed to generate keys."
+                [ERROR_EMPTY_RESPONSE_CONFIG]="Empty response from server when updating configuration."
+                [ERROR_UPDATE_XRAY_CONFIG]="Failed to update Xray configuration."
+                [ERROR_EMPTY_RESPONSE_NODE]="Empty response from server when creating node."
+                [ERROR_CREATE_NODE]="Failed to create node."
+                [ERROR_EMPTY_RESPONSE_INBOUNDS]="Empty response from server when getting inbounds."
+                [ERROR_EXTRACT_UUID]="Failed to extract UUID from response."
+                [ERROR_EMPTY_RESPONSE_HOST]="Empty response from server when creating host."
+                [ERROR_CREATE_HOST]="Failed to create host."
+            )
+            ;;
+        ru)
+            LANG=(
+                [ERROR_ROOT]="Скрипт нужно запускать с правами root"
+                [ERROR_OS]="Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
+                [MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
+                [MENU_1]="Стандартная установка"
+                [MENU_2]="Переустановить панель"
+                [MENU_3]="Выбрать случайный шаблон"
+                [MENU_4]="Выход"
+                [PROMPT_ACTION]="Выберите действие (1-4):"
+                [INVALID_CHOICE]="Неверный выбор. Выберите 1-4."
+                [EXITING]="Выход"
+                [INSTALL_PACKAGES]="Установка необходимых пакетов..."
+				[INSTALLING1]="Установка Remnawave"
+				[ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
+                [ENTER_SUB_DOMAIN]="Введите домен подписки (например, sub.example.com):"
+                [ENTER_CF_TOKEN]="Введите Cloudflare API токен или глобальный ключ:"
+                [ENTER_CF_EMAIL]="Введите зарегистрированную почту Cloudflare:"
+				[CHECK_CERTS]="Проверка сертификатов..."
+				[CERT_EXIST1]="Сертификаты найдены в /etc/letsencrypt/live/"
+				[CERT_EXIST]="Используем существующие сертификаты"
+                [CF_VALIDATING]="Cloudflare API ключ и email валидны"
+                [CF_INVALID]="Неверный Cloudflare API ключ или email после %d попыток."
+				[CF_INVALID_ATTEMPT]="Неверный Cloudflare API ключ или email. Попытка %d из %d."
+                [CERT_MISSING]="Сертификаты не найдены. Получаем новые..."
+				[CONFIG_JSON]="Настройка remnawave-json..."
+				[INSTALLING]="Пожалуйста, подождите..."
+				[REQUEST_API_TOKEN]="Выполняем запрос к API для получения токена..."
+				[GET_PUBLIC_KEY]="Получаем публичный ключ..."
+                [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
+				[GENERATE_KEYS]="Генерация ключей x25519..."
+				[UPDATING_XRAY_CONFIG]="Обновление конфигурации Xray..."
+                [XRAY_CONFIG_UPDATED]="Конфигурация Xray успешно обновлена."
+                [NODE_CREATED]="Узел успешно создан."
+                [CREATE_HOST]="Создаем хост с UUID:"
+                [HOST_CREATED]="Хост успешно создан."
+                [STOPPING_REMNAWAVE]="Остановка Remnawave"
+				[STARTING_REMNAWAVE]="Запуск Remnawave"
+                [INSTALL_COMPLETE]="               УСТАНОВКА ЗАВЕРШЕНА!"
+                [PANEL_ACCESS]="Панель доступна по адресу:"
+                [ADMIN_CREDS]="Для входа в панель используйте следующие данные:"
+                [USERNAME]="Логин:"
+                [PASSWORD]="Пароль:"
+                [RELAUNCH_CMD]="Для повторного запуска:"
+                [DOWNLOAD_FAIL]="Ошибка загрузки, повторная попытка..."
+                [UNPACK_ERROR]="Ошибка распаковки архива"
+				[RANDOM_TEMPLATE]="Установка случайного шаблона для"
+                [TEMPLATE_COPY]="Шаблон скопирован в /var/www/html/"
+                [SELECT_TEMPLATE]="Выбран шаблон:"
+				#Error
+				[ERROR_TOKEN]="Не удалось получить токен."
+                [ERROR_EXTRACT_TOKEN]="Не удалось извлечь токен из ответа."
+                [ERROR_PUBLIC_KEY]="Не удалось получить публичный ключ."
+                [ERROR_EXTRACT_PUBLIC_KEY]="Не удалось извлечь публичный ключ из ответа."
+                [ERROR_GENERATE_KEYS]="Не удалось сгенерировать ключи."
+                [ERROR_EMPTY_RESPONSE_CONFIG]="Пустой ответ от сервера при обновлении конфигурации."
+                [ERROR_UPDATE_XRAY_CONFIG]="Не удалось обновить конфигурацию Xray."
+                [ERROR_EMPTY_RESPONSE_NODE]="Пустой ответ от сервера при создании узла."
+                [ERROR_CREATE_NODE]="Не удалось создать узел."
+                [ERROR_EMPTY_RESPONSE_INBOUNDS]="Пустой ответ от сервера при получении inbounds."
+                [ERROR_EXTRACT_UUID]="Не удалось извлечь UUID из ответа."
+                [ERROR_EMPTY_RESPONSE_HOST]="Пустой ответ от сервера при создании хоста."
+                [ERROR_CREATE_HOST]="Не удалось создать хост."
+            )
+            ;;
+    esac
+}
+
 question() {
     echo -e "${COLOR_GREEN}[?]${COLOR_RESET} ${COLOR_YELLOW}$*${COLOR_RESET}"
 }
@@ -18,13 +171,13 @@ reading() {
 }
 
 error() {
-    echo -e "${COLOR_RED}[ERROR] $*${COLOR_RESET}"
+    echo -e "${COLOR_RED}$*${COLOR_RESET}"
     exit 1
 }
 
 check_os() {
     if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release; then
-        error "Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
+        error "${LANG[ERROR_OS]}"
     fi
 }
 
@@ -47,7 +200,7 @@ update_remnawave_reverse() {
 
 check_root() {
     if [[ $EUID -ne 0 ]]; then
-        error "Скрипт нужно запускать с правами root"
+        error "${LANG[ERROR_ROOT]}"
     fi
 }
 
@@ -56,12 +209,22 @@ generate_password() {
     tr -dc 'a-zA-Z' < /dev/urandom | fold -w $length | head -n 1
 }
 
+show_language() {
+    echo -e "${COLOR_GREEN}${LANG[CHOOSE_LANG]}${COLOR_RESET}"
+	echo -e ""
+	echo -e "${COLOR_YELLOW}1. ${LANG[LANG_EN]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}2. ${LANG[LANG_RU]}${COLOR_RESET}"
+	echo -e ""
+}
+
 show_menu() {
-    echo -e "${COLOR_GREEN}REMNAWAVE REVERSE-PROXY${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}1. Стандартная установка${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}2. Переустановить панель${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}3. Выбрать случайный шаблон для сайта${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}4. Выход${COLOR_RESET}"
+    echo -e "${COLOR_GREEN}${LANG[MENU_TITLE]}${COLOR_RESET}"
+	echo -e ""
+    echo -e "${COLOR_YELLOW}1. ${LANG[MENU_1]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}2. ${LANG[MENU_2]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}3. ${LANG[MENU_3]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}4. ${LANG[MENU_4]}${COLOR_RESET}"
+	echo -e ""
 }
 
 extract_domain() {
@@ -74,7 +237,7 @@ check_certificates() {
 
     if [ -d "/etc/letsencrypt/live/$DOMAIN" ]; then
         if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] && [ -f "/etc/letsencrypt/live/$DOMAIN/privkey.pem" ]; then
-            echo "Сертификаты найдены в /etc/letsencrypt/live/$DOMAIN."
+            echo "${LANG[CERT_EXIST1]}""$DOMAIN"
             return 0
         fi
     fi
@@ -83,7 +246,7 @@ check_certificates() {
 
 add_cron_rule() {
     local rule="$1"
-    local logged_rule="${rule} >> /var/log/cron_jobs.log 2>&1"
+    local logged_rule="${rule} >> ${DIR_REMNAWAVE}cron_jobs.log 2>&1"
 
     ( crontab -l | grep -Fxq "$logged_rule" ) || ( crontab -l 2>/dev/null; echo "$logged_rule" ) | crontab -
 }
@@ -97,37 +260,39 @@ spinner() {
 
   local spinstr='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
   local text_code="$COLOR_GREEN"
-  local bg_code=""  # Без фона
-  local effect_code="\033[1m" # Жирный
+  local bg_code=""
+  local effect_code="\033[1m"
   local delay=0.1
   local reset_code="$COLOR_RESET"
 
+  printf "${effect_code}${text_code}${bg_code}%s${reset_code}" "$text" > /dev/tty
+
   while kill -0 "$pid" 2>/dev/null; do
     for (( i=0; i<${#spinstr}; i++ )); do
-      printf " ${effect_code}${text_code}${bg_code}[%s] %s${reset_code}" "$(echo -n "${spinstr:$i:1}")" "$text" > /dev/tty
+      printf "\r${effect_code}${text_code}${bg_code}[%s] %s${reset_code}" "$(echo -n "${spinstr:$i:1}")" "$text" > /dev/tty
       sleep $delay
-      printf "\r\033[K" > /dev/tty
     done
   done
+
   printf "\r\033[K" > /dev/tty
 }
 
 randomhtml() {
-    cd /root/ || { echo "Ошибка: не удалось перейти в /root/"; exit 1; }
+    cd /root/ || { echo "${LANG[UNPACK_ERROR]}"; exit 1; }
 
-    echo -e "${COLOR_YELLOW}Установка случайного шаблона для $DOMAIN${COLOR_RESET}"
-    spinner $$ "Пожалуйста, подождите... " &
+    echo -e "${COLOR_YELLOW}${LANG[RANDOM_TEMPLATE]} ${COLOR_WHITE}$DOMAIN${COLOR_RESET}"
+    spinner $$ "${LANG[INSTALLING]}" &
     spinner_pid=$!
 
     while ! wget -q --timeout=30 --tries=10 --retry-connrefused "https://github.com/cortez24rus/xui-rp-web/archive/refs/heads/main.zip"; do
-        echo "Скачивание не удалось, пробуем снова..."
+        echo "${LANG[DOWNLOAD_FAIL]}"
         sleep 3
     done
 
-    unzip main.zip &>/dev/null || { echo "Ошибка: не удалось распаковать архив"; exit 0; }
+    unzip main.zip &>/dev/null || { echo "${LANG[UNPACK_ERROR]}"; exit 0; }
     rm -f main.zip
 
-    cd simple-web-templates-main/ || { echo "Ошибка: не удалось перейти в распакованную директорию"; exit 0; }
+    cd simple-web-templates-main/ || { echo "${LANG[UNPACK_ERROR]}"; exit 0; }
 
     rm -rf assets ".gitattributes" "README.md" "_config.yml"
 
@@ -137,14 +302,14 @@ randomhtml() {
     wait "$spinner_pid" 2>/dev/null
     printf "\r\033[K" > /dev/tty
     
-    echo "Выбран случайный шаблон: ${RandomHTML}"
+    echo "${LANG[SELECT_TEMPLATE]}" "${RandomHTML}"
 
     if [[ -d "${RandomHTML}" && -d "/var/www/html/" ]]; then
         rm -rf /var/www/html/*
         cp -a "${RandomHTML}"/. "/var/www/html/"
-        echo "Шаблон успешно скопирован в /var/www/html/"
+        echo "${LANG[TEMPLATE_COPY]}"
     else
-        echo "Ошибка: не удалось скопировать шаблон" && exit 0
+        echo "${LANG[UNPACK_ERROR]}" && exit 0
     fi
 
     cd /root/
@@ -152,8 +317,7 @@ randomhtml() {
 }
 
 install_packages() {
-    # Update
-	echo -e "${COLOR_YELLOW}Установка необходимых пакетов...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[INSTALL_PACKAGES]}${COLOR_RESET}"
     apt-get update -y
     apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git certbot python3-certbot-dns-cloudflare
 
@@ -172,7 +336,7 @@ install_packages() {
     apt-get update
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-	# Enable BBR
+    # BBR
     if ! grep -q "net.core.default_qdisc = fq" /etc/sysctl.conf; then
         echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
     fi
@@ -180,7 +344,7 @@ install_packages() {
         echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
     fi
 
-	# Disable IPv6
+    # IPv6
     interface_name=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo | head -n 1)
     if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" /etc/sysctl.conf; then
         echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
@@ -197,7 +361,7 @@ install_packages() {
 
     sysctl -p > /dev/null 2>&1
 
-	# UFW
+    # UFW
     ufw --force reset
     ufw allow 22/tcp comment 'SSH'
     ufw allow 443/tcp comment 'HTTPS'
@@ -210,10 +374,8 @@ get_certificates() {
     local DOMAIN=$1
     local WILDCARD_DOMAIN="*.$DOMAIN"
 
-	echo -e "${COLOR_YELLOW}Получаем сертификаты...${COLOR_RESET}"
-
-    reading "Введите ваш Cloudflare API токен или глобальный API ключ:" CLOUDFLARE_API_KEY
-    reading "Введите вашу почту, зарегистрированную на Cloudflare:" CLOUDFLARE_EMAIL
+    reading "${LANG[ENTER_CF_TOKEN]}" CLOUDFLARE_API_KEY
+    reading "${LANG[ENTER_CF_EMAIL]}" CLOUDFLARE_EMAIL
 
     check_api() {
         local attempts=3
@@ -227,18 +389,18 @@ get_certificates() {
             fi
 
             if echo "$api_response" | grep -q '"success":true'; then
-                echo -e "${COLOR_GREEN}Cloudflare API ключ и email валидны.${COLOR_RESET}"
+                echo -e "${COLOR_GREEN}${LANG[CF_VALIDATING]}${COLOR_RESET}"
                 return 0
             else
-                echo -e "${COLOR_RED}Ошибка: Неверный Cloudflare API ключ или email. Попытка $attempt из $attempts.${COLOR_RESET}"
+				echo -e "${COLOR_RED}$(printf "${LANG[CF_INVALID_ATTEMPT]}" "$attempt" "$attempts")${COLOR_RESET}"
                 if [ $attempt -lt $attempts ]; then
-                    read -p "Пожалуйста, введите ваш Cloudflare API ключ: " CLOUDFLARE_API_KEY
-                    read -p "Пожалуйста, введите ваш Cloudflare email: " CLOUDFLARE_EMAIL
+                    reading "${LANG[ENTER_CF_TOKEN]}" CLOUDFLARE_API_KEY
+                    reading "${LANG[ENTER_CF_EMAIL]}" CLOUDFLARE_EMAIL
                 fi
                 attempt=$((attempt + 1))
             fi
         done
-        error "Ошибка: Неверный Cloudflare API ключ или email после $attempts попыток."
+        error "$(printf "${LANG[CF_INVALID]}" "$attempts")"
     }
 
     check_api
@@ -275,8 +437,8 @@ EOL
 install_remnawave() {
     mkdir -p ~/remnawave && cd ~/remnawave
 
-    reading "Введите ваш домен панели (например, panel.example.com):" PANEL_DOMAIN
-    reading "Введите ваш домен подписки (например, sub.example.com):" SUB_DOMAIN
+    reading "${LANG[ENTER_PANEL_DOMAIN]}" PANEL_DOMAIN
+	reading "${LANG[ENTER_SUB_DOMAIN]}" SUB_DOMAIN
 
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
@@ -433,8 +595,6 @@ services:
     networks:
       - remnawave-network
     volumes:
-    #   - path/to/templates/v2ray/default.json:/app/templates/v2ray/default.json
-    #   - path/to/templates/mux/default.json:/app/templates/mux/default.json
       - ./remnawave-json/templates/subscription/index.html:/app/templates/subscription/index.html
 
   remnanode:
@@ -546,72 +706,67 @@ server {
     return 444;
 }
 EOL
-	echo -e "${COLOR_YELLOW}Настройка remnawave-json...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[CONFIG_JSON]}${COLOR_RESET}"
     git clone https://github.com/Jolymmiles/remnawave-json
     cd remnawave-json
     cat > .env <<EOL
 REMNAWAVE_URL=https://$PANEL_DOMAIN
 APP_PORT=4000
 APP_HOST=0.0.0.0
-# V2RAY_TEMPLATE_PATH=/app/templates/v2ray/default.json
-# V2RAY_MUX_ENABLED=true
-# V2RAY_MUX_TEMPLATE_PATH=/app/templates/v2ray/mux_default.json
 WEB_PAGE_TEMPLATE_PATH=/app/templates/subscription/index.html
 EOL
 }
 
 installation() {
-    echo -e "${COLOR_YELLOW}Установка Remnawave${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[INSTALLING1]}${COLOR_RESET}"
     sleep 1
 
     install_remnawave
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
-    echo -e "${COLOR_YELLOW}Проверка наличия сертификатов...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[CHECK_CERTS]}${COLOR_RESET}"
     sleep 1
     if check_certificates $DOMAIN; then
-        echo -e "${COLOR_YELLOW}Используем существующие сертификаты.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[CERT_EXIST]}${COLOR_RESET}"
     else
-		echo -e "${COLOR_RED}Cертификаты не найдены.${COLOR_RESET}"
+        echo -e "${COLOR_RED}${LANG[CERT_MISSING]}${COLOR_RESET}"
         get_certificates $DOMAIN
     fi
 
-    echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[STARTING_REMNAWAVE]}${COLOR_RESET}"
     sleep 1
     cd /root/remnawave
     docker compose up -d > /dev/null 2>&1 &
     
-    spinner $! "Пожалуйста, подождите... "
-    
+    spinner $! "${LANG[INSTALLING]}"
+	
     domain_url="127.0.0.1:3000"
     node_url="$DOMAIN"
-    username="$SUPERADMIN_USERNAME"
-    password="$SUPERADMIN_PASSWORD"
     target_dir="/root/remnawave"
     config_file="$target_dir/config.json"
 
-    hashed_password=$(echo -n "$password" | md5sum | awk '{print $1}')
+    hashed_password=$(echo -n "$SUPERADMIN_PASSWORD" | md5sum | awk '{print $1}')
 
-    echo -e "${COLOR_YELLOW}Выполняем запрос к API для получения токена...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[REQUEST_API_TOKEN]}${COLOR_RESET}"
     sleep 10
     response=$(curl -s -X POST "http://$domain_url/api/auth/login" \
-        -d "username=$username&password=$hashed_password" \
+        -d "username=$SUPERADMIN_USERNAME&password=$hashed_password" \
         -H "Host: $PANEL_DOMAIN" \
         -H "X-Forwarded-For: $domain_url" \
         -H "X-Forwarded-Proto: https")
-
-    if [ -z "$response" ]; then
-        echo "Ошибка: Не удалось получить токен."
+	
+	if [ -z "$response" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_TOKEN]}${COLOR_RESET}"
     fi
 
     token=$(echo "$response" | jq -r '.response.accessToken')
-    if [ -z "$token" ]; then
-        echo "Ошибка: Не удалось извлечь токен из ответа."
+	if [ -z "$token" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EXTRACT_TOKEN]}${COLOR_RESET}"
     fi
-
+	
     echo "$token" > token.txt
 
-    echo -e "${COLOR_YELLOW}Получаем публичный ключ...${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}${LANG[GET_PUBLIC_KEY]}${COLOR_RESET}"
     sleep 1
 
     token=$(cat token.txt)
@@ -623,15 +778,15 @@ installation() {
         -H "X-Forwarded-Proto: https")
 
     if [ -z "$api_response" ]; then
-        echo "Ошибка: Не удалось получить публичный ключ."
+        echo -e "${COLOR_RED}${LANG[ERROR_PUBLIC_KEY]}${COLOR_RESET}"
     fi
 
     pubkey=$(echo "$api_response" | jq -r '.response.pubKey')
     if [ -z "$pubkey" ]; then
-        echo "Ошибка: Не удалось извлечь публичный ключ из ответа."
+        echo -e "${COLOR_RED}${LANG[ERROR_EXTRACT_PUBLIC_KEY]}${COLOR_RESET}"
     fi
 
-    echo -e "${COLOR_YELLOW}Публичный ключ успешно получен.${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[PUBLIC_KEY_SUCCESS]}${COLOR_RESET}"
 
     env_node_file="$target_dir/.env-node"
     cat > "$env_node_file" <<EOL
@@ -642,15 +797,14 @@ APP_PORT=2222
 SSL_CERT="$pubkey"
 EOL
 
-	# Генерация ключей x25519 с помощью Docker
-	echo -e "${COLOR_YELLOW}Генерация ключей x25519...${COLOR_RESET}"
-	sleep 1
+    echo -e "${COLOR_YELLOW}${LANG[GENERATE_KEYS]}${COLOR_RESET}"
+    sleep 1
     keys=$(docker run --rm ghcr.io/xtls/xray-core x25519)
     private_key=$(echo "$keys" | grep "Private key:" | awk '{print $3}')
     public_key=$(echo "$keys" | grep "Public key:" | awk '{print $3}')
-
-    if [ -z "$private_key" ] || [ -z "$public_key" ]; then
-        echo "Ошибка: Не удалось сгенерировать ключи."
+	
+	if [ -z "$private_key" ] || [ -z "$public_key" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
     fi
 
     short_id=$(openssl rand -hex 8)
@@ -734,8 +888,7 @@ EOL
 }
 EOL
 
-	echo -e "${COLOR_YELLOW}Обновление конфигурации Xray...${COLOR_RESET}"
-	sleep 1
+    echo -e "${COLOR_YELLOW}${LANG[UPDATING_XRAY_CONFIG]}${COLOR_RESET}"
     NEW_CONFIG=$(cat "$config_file")
     update_response=$(curl -s -X POST "http://$domain_url/api/xray/update-config" \
         -H "Authorization: Bearer $token" \
@@ -746,14 +899,14 @@ EOL
         -d "$NEW_CONFIG")
 
     if [ -z "$update_response" ]; then
-        echo "Ошибка: Пустой ответ от сервера при обновлении конфигурации."
+        echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_CONFIG]}${COLOR_RESET}"
     fi
 
     if echo "$update_response" | jq -e '.response.config' > /dev/null; then
-        echo -e "${COLOR_YELLOW}Конфигурация Xray успешно обновлена.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[XRAY_CONFIG_UPDATED]}${COLOR_RESET}"
         sleep 1
     else
-        echo "Ошибка: Не удалось обновить конфигурацию Xray."
+        echo -e "${COLOR_RED}${LANG[ERROR_UPDATE_XRAY_CONFIG]}${COLOR_RESET}"
     fi
 
     NEW_NODE_DATA=$(cat <<EOF
@@ -778,15 +931,15 @@ EOF
         -H "X-Forwarded-For: $domain_url" \
         -H "X-Forwarded-Proto: https" \
         -d "$NEW_NODE_DATA")
-
-    if [ -z "$node_response" ]; then
-        echo "Ошибка: Пустой ответ от сервера при создании узла."
+		
+	if [ -z "$node_response" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_NODE]}${COLOR_RESET}"
     fi
 
     if echo "$node_response" | jq -e '.response.uuid' > /dev/null; then
-        echo -e "${COLOR_YELLOW}Узел успешно создан.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[NODE_CREATED]}${COLOR_RESET}"
     else
-        echo "Ошибка: Не удалось создать узел."
+        echo -e "${COLOR_RED}${LANG[ERROR_CREATE_NODE]}${COLOR_RESET}"
     fi
 
     inbounds_response=$(curl -s -X GET "http://$domain_url/api/inbounds" \
@@ -795,16 +948,18 @@ EOF
         -H "Host: $PANEL_DOMAIN" \
         -H "X-Forwarded-For: $domain_url" \
         -H "X-Forwarded-Proto: https")
-
-    if [ -z "$inbounds_response" ]; then
-        echo "Ошибка: Пустой ответ от сервера при получении inbounds."
+		
+	if [ -z "$inbounds_response" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_INBOUNDS]}${COLOR_RESET}"
     fi
 
     inbound_uuid=$(echo "$inbounds_response" | jq -r '.response[0].uuid')
-    if [ -z "$inbound_uuid" ]; then
-        echo "Ошибка: Не удалось извлечь UUID из ответа."
+	
+	if [ -z "$inbound_uuid" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EXTRACT_UUID]}${COLOR_RESET}"
     fi
-	echo -e "${COLOR_YELLOW}Создаем хост с UUID: $inbound_uuid...${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}${LANG[CREATE_HOST]}$inbound_uuid${COLOR_RESET}"
+	
     host_data=$(cat <<EOF
 {
     "inboundUuid": "$inbound_uuid",
@@ -829,38 +984,41 @@ EOF
         -H "X-Forwarded-For: $domain_url" \
         -H "X-Forwarded-Proto: https" \
         -d "$host_data")
-
-    if [ -z "$host_response" ]; then
-        echo "Ошибка: Пустой ответ от сервера при создании хоста."
+		
+	if [ -z "$host_response" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_HOST]}${COLOR_RESET}"
     fi
 
     if echo "$host_response" | jq -e '.response.uuid' > /dev/null; then
-	echo -e "${COLOR_YELLOW}Хост успешно создан.${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}${LANG[HOST_CREATED]}${COLOR_RESET}"
     else
-        echo "Ошибка: Не удалось создать хост."
+        echo -e "${COLOR_RED}${LANG[ERROR_CREATE_HOST]}${COLOR_RESET}"
     fi
-
-    sleep 2
-    echo -e "${COLOR_YELLOW}Остановка Remnawave${COLOR_RESET}"
-    docker compose down
-    sleep 10
-    echo -e "${COLOR_YELLOW}Запуск Remnawave${COLOR_RESET}"
-    docker compose up -d
-    sleep 10
+	sleep 1
+	
+    echo -e "${COLOR_YELLOW}${LANG[STOPPING_REMNAWAVE]}${COLOR_RESET}"
+    sleep 1
+	docker compose down > /dev/null 2>&1 &
+	spinner $! "${LANG[INSTALLING]}"
+	
+	echo -e "${COLOR_YELLOW}${LANG[STARTING_REMNAWAVE]}${COLOR_RESET}"
+    sleep 1
+	docker compose up -d > /dev/null 2>&1 &
+	spinner $! "${LANG[INSTALLING]}"
 
     clear
 
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}               УСТАНОВКА ЗАВЕРШЕНА!${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[INSTALL_COMPLETE]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}Панель доступна по адресу:${COLOR_RESET}"
+	echo -e "${COLOR_YELLOW}${LANG[PANEL_ACCESS]}${COLOR_RESET}"
     echo -e "${COLOR_WHITE}https://$PANEL_DOMAIN${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}-------------------------------------------------${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}Для входа в панель используйте следующие данные:${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}Логин: ${COLOR_WHITE}$SUPERADMIN_USERNAME${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}Пароль: ${COLOR_WHITE}$SUPERADMIN_PASSWORD${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[ADMIN_CREDS]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[USERNAME]} ${COLOR_WHITE}$SUPERADMIN_USERNAME${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[PASSWORD]} ${COLOR_WHITE}$SUPERADMIN_PASSWORD${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}-------------------------------------------------${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW}Чтобы заново вызвать скрипт, используйте команду:${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[RELAUNCH_CMD]}${COLOR_RESET}"
     echo -e "${COLOR_WHITE}remnawave_reverse${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
 
@@ -868,37 +1026,46 @@ EOF
 }
 
 log_entry
-update_remnawave_reverse
-check_os
 check_root
+check_os
+update_remnawave_reverse
+
+show_language
+reading "Choose option (1-2):" LANG_OPTION
+
+case $LANG_OPTION in
+    1) set_language en ;;
+    2) set_language ru ;;
+    *) error "Invalid choice. Please select 1-2." ;;
+esac
+
 show_menu
-reading "Выберите действие (1-4):" OPTION
+reading "${LANG[PROMPT_ACTION]}" OPTION
 
 case $OPTION in
     1)
-        if [ ! -f ${DIR_REMNAWAVE}install_packages ]; then
-	    install_packages
-	fi
-	installation
- 	log_clear
+        [ ! -f ${DIR_REMNAWAVE}install_packages ] && install_packages
+        installation
+        log_clear
         ;;
     2)
         cd /root/remnawave
-        docker compose down -v --rmi all --remove-orphans
+        docker compose down -v --rmi all --remove-orphans > /dev/null 2>&1 &
+		spinner $! "${LANG[INSTALLING]}"
         rm -rf /root/remnawave
         installation
-	log_clear
+        log_clear
         ;;
     3)
         randomhtml
-	log_clear
+        log_clear
         ;;
     4)
-        echo -e "${COLOR_YELLOW}Выход.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[EXITING]}${COLOR_RESET}"
         exit 0
         ;;
     *)
-        echo -e "${COLOR_YELLOW}Неверный выбор. Пожалуйста, выберите опцию от 1 до 4.${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[INVALID_CHOICE]}${COLOR_RESET}"
         exit 1
         ;;
 esac
