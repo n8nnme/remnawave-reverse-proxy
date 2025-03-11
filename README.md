@@ -37,4 +37,3 @@ To set up the server, run this command on it:
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh)
 ```
-<p align="center"><a href="#"><img src="./media/remnawave-reverse-proxy.png" alt="Image"></a></p>
