@@ -1,5 +1,4 @@
 # REMNAWAVE-REVERSE-PROXY ([Russian](/README-RU.md))
-<p align="center"><a href="#"><img src="./media/xui.png" alt="Image" ></a></p>
 ### Server Using NGINX Reverse Proxy
 This script is designed for quick setup of a reverse proxy server based on NGINX in combination with Xray. In this setup, Xray operates directly on port 443, redirects to a socket, and NGINX listens to it, eliminating unnecessary TCP overhead. This approach enhances connection performance and stability.
 > [!IMPORTANT]
