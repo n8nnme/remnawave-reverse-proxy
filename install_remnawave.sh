@@ -53,7 +53,9 @@ set_language() {
 		[CONFIG_JSON]="Configuring remnawave-json..."
 		[INSTALLING]="Please wait..."
 		#API
-		[REQUEST_API_TOKEN]="Requesting API token..."
+		[REGISTERING_REMNAWAVE]="Registering in Remnawave"
+		[CHECK_SERVER]="Checking server availability..."
+		[SERVER_NOT_READY]="Server is not ready, waiting..."
 		[GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
 		[GENERATE_KEYS]="Generating x25519 keys..."
@@ -65,7 +67,7 @@ set_language() {
 		#Stop/Start
                 [STARTING_REMNAWAVE]="Starting Remnawave"
 		[STOPPING_REMNAWAVE]="Stopping Remnawave"
-		#Menu end
+		#Menu End
 		[INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
 		[PANEL_ACCESS]="Panel URL:"
                 [ADMIN_CREDS]="To log into the panel, use the following data:"
@@ -92,13 +94,17 @@ set_language() {
                 [ERROR_EXTRACT_UUID]="Failed to extract UUID from response."
                 [ERROR_EMPTY_RESPONSE_HOST]="Empty response from server when creating host."
                 [ERROR_CREATE_HOST]="Failed to create host."
+		[ERROR_EMPTY_RESPONSE_REGISTER]="Registration error - empty server response"
+		[ERROR_REGISTER]="Registration error"
             )
             ;;
         ru)
             LANG=(
-                [ERROR_ROOT]="Скрипт нужно запускать с правами root"
+                #check
+		[ERROR_ROOT]="Скрипт нужно запускать с правами root"
                 [ERROR_OS]="Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
                 [MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
+		#Menu
                 [MENU_1]="Стандартная установка"
                 [MENU_2]="Переустановить панель"
                 [MENU_3]="Выбрать случайный шаблон"
@@ -106,6 +112,7 @@ set_language() {
                 [PROMPT_ACTION]="Выберите действие (1-4):"
                 [INVALID_CHOICE]="Неверный выбор. Выберите 1-4."
                 [EXITING]="Выход"
+		#Remna
                 [INSTALL_PACKAGES]="Установка необходимых пакетов..."
 		[INSTALLING1]="Установка Remnawave"
 		[ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
@@ -121,7 +128,10 @@ set_language() {
                 [CERT_MISSING]="Сертификаты не найдены. Получаем новые..."
 		[CONFIG_JSON]="Настройка remnawave-json..."
 		[INSTALLING]="Пожалуйста, подождите..."
-		[REQUEST_API_TOKEN]="Выполняем запрос к API для получения токена..."
+		#API
+		[REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
+		[CHECK_SERVER]="Проверка доступности сервера..."
+		[SERVER_NOT_READY]="Сервер не готов, ожидание..."
 		[GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
 		[GENERATE_KEYS]="Генерация ключей x25519..."
@@ -130,14 +140,17 @@ set_language() {
                 [NODE_CREATED]="Узел успешно создан."
                 [CREATE_HOST]="Создаем хост с UUID:"
                 [HOST_CREATED]="Хост успешно создан."
+		#Stop/Start
                 [STOPPING_REMNAWAVE]="Остановка Remnawave"
 		[STARTING_REMNAWAVE]="Запуск Remnawave"
+		#Menu End
                 [INSTALL_COMPLETE]="               УСТАНОВКА ЗАВЕРШЕНА!"
                 [PANEL_ACCESS]="Панель доступна по адресу:"
                 [ADMIN_CREDS]="Для входа в панель используйте следующие данные:"
                 [USERNAME]="Логин:"
                 [PASSWORD]="Пароль:"
                 [RELAUNCH_CMD]="Для повторного запуска:"
+		#RandomHTML
                 [DOWNLOAD_FAIL]="Ошибка загрузки, повторная попытка..."
                 [UNPACK_ERROR]="Ошибка распаковки архива"
 		[RANDOM_TEMPLATE]="Установка случайного шаблона для"
@@ -157,6 +170,8 @@ set_language() {
                 [ERROR_EXTRACT_UUID]="Не удалось извлечь UUID из ответа."
                 [ERROR_EMPTY_RESPONSE_HOST]="Пустой ответ от сервера при создании хоста."
                 [ERROR_CREATE_HOST]="Не удалось создать хост."
+		[ERROR_EMPTY_RESPONSE_REGISTER]="Ошибка при регистрации - пустой ответ сервера"
+		[ERROR_REGISTER]="Ошибка регистрации"
             )
             ;;
     esac
@@ -207,6 +222,13 @@ check_root() {
 generate_password() {
     local length=8
     tr -dc 'a-zA-Z' < /dev/urandom | fold -w $length | head -n 1
+}
+
+generate_password1() {
+    local length=24
+    local chars='A-Za-z0-9' # Заглавные и строчные буквы, цифры
+    local password=$(head /dev/urandom | tr -dc "$chars" | head -c "$length")
+    echo "$password"
 }
 
 show_language() {
@@ -444,7 +466,7 @@ install_remnawave() {
     DOMAIN=$(extract_domain $PANEL_DOMAIN)
 
     SUPERADMIN_USERNAME=$(generate_password)
-    SUPERADMIN_PASSWORD=$(generate_password)
+    SUPERADMIN_PASSWORD=$(generate_password1)
 
     METRICS_USER=$(generate_password)
     METRICS_PASS=$(generate_password)
@@ -469,7 +491,12 @@ METRICS_PORT=3001
 API_INSTANCES=1
 
 ### DATABASE ###
+# FORMAT: postgresql://{user}:{password}@{host}:{port}/{database}
 DATABASE_URL="postgresql://postgres:postgres@remnawave-db:5432/postgres"
+
+### REDIS ###
+REDIS_HOST=remnawave-redis
+REDIS_PORT=6379
 
 ### JWT ###
 JWT_AUTH_SECRET=$JWT_AUTH_SECRET
@@ -496,6 +523,8 @@ DISABLED_USER_REMARKS=["❌ Subscription disabled","Contact support"]
 LIMITED_USER_REMARKS=["🔴 Subscription limited","Contact support"]
 
 ### SUBSCRIPTION PUBLIC DOMAIN ###
+### RAW DOMAIN, WITHOUT HTTP/HTTPS, DO NOT PLACE / to end of domain ###
+### Used in "profile-web-page-url" response header ###
 SUB_PUBLIC_DOMAIN=$SUB_DOMAIN
 
 ### SUPERADMIN ###
@@ -517,9 +546,13 @@ WEBHOOK_URL=https://webhook.site/1234567890
 WEBHOOK_SECRET_HEADER=vsmu67Kmg6R8FjIOF1WUY8LWBHie4scdEqrfsKmyf4IAf8dY3nFS0wwYHkhh6ZvQ
 
 ### CLOUDFLARE ###
+# USED ONLY FOR docker-compose-prod-with-cf.yml
+# NOT USED BY THE APP ITSELF
 CLOUDFLARE_TOKEN=ey...
 
 ### Database ###
+### For Postgres Docker container ###
+# NOT USED BY THE APP ITSELF
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
@@ -552,7 +585,7 @@ services:
       retries: 3
 
   remnawave:
-    image: remnawave/backend:latest
+    image: remnawave/backend:dev
     container_name: remnawave
     hostname: remnawave
     restart: always
@@ -565,6 +598,16 @@ services:
     depends_on:
       remnawave-db:
         condition: service_healthy
+
+  remnawave-redis:
+    image: valkey/valkey:8.0.2-alpine
+    container_name: remnawave-redis
+    hostname: remnawave-redis
+    restart: always
+    networks:
+      - remnawave-network
+    volumes:
+      - remnawave-redis-data:/data
 
   remnawave-nginx:
     image: nginx:1.27
@@ -599,7 +642,7 @@ services:
       - ./remnawave-json/templates/subscription/index.html:/app/templates/subscription/index.html
 
   remnanode:
-    image: remnawave/node:latest
+    image: remnawave/node:dev
     container_name: remnanode
     hostname: remnanode
     restart: always
@@ -623,6 +666,10 @@ volumes:
     driver: local
     external: false
     name: remnawave-db-data
+  remnawave-redis-data:
+    driver: local
+    external: false
+    name: remnawave-redis-data
 EOL
 
     cat > nginx.conf <<EOL
@@ -746,31 +793,35 @@ installation() {
     target_dir="/root/remnawave"
     config_file="$target_dir/config.json"
 
-    hashed_password=$(echo -n "$SUPERADMIN_PASSWORD" | md5sum | awk '{print $1}')
-
-    echo -e "${COLOR_YELLOW}${LANG[REQUEST_API_TOKEN]}${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}${LANG[REGISTERING_REMNAWAVE]}${COLOR_RESET}"
     sleep 10
-    response=$(curl -s -X POST "http://$domain_url/api/auth/login" \
-        -d "username=$SUPERADMIN_USERNAME&password=$hashed_password" \
+	
+    echo -e "${COLOR_YELLOW}${LANG[CHECK_SERVER]}${COLOR_RESET}"
+    until curl -s "http://$domain_url/api/auth/register" > /dev/null; do
+        echo -e "${COLOR_RED}${LANG[SERVER_NOT_READY]}${COLOR_RESET}"
+        sleep 5
+    done
+
+    register_response=$(curl -s "http://$domain_url/api/auth/register" \
         -H "Host: $PANEL_DOMAIN" \
         -H "X-Forwarded-For: $domain_url" \
-        -H "X-Forwarded-Proto: https")
-	
-	if [ -z "$response" ]; then
-        echo -e "${COLOR_RED}${LANG[ERROR_TOKEN]}${COLOR_RESET}"
+        -H "X-Forwarded-Proto: https" \
+        -H "Content-Type: application/json" \
+        --data-raw '{"username":"'"$SUPERADMIN_USERNAME"'","password":"'"$SUPERADMIN_PASSWORD"'"}')
+
+    if [ -z "$register_response" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_REGISTER]}${COLOR_RESET}"
     fi
 
-    token=$(echo "$response" | jq -r '.response.accessToken')
-	if [ -z "$token" ]; then
-        echo -e "${COLOR_RED}${LANG[ERROR_EXTRACT_TOKEN]}${COLOR_RESET}"
+    if [[ "$register_response" == *"accessToken"* ]]; then
+        token=$(echo "$register_response" | jq -r '.response.accessToken')
+    else
+        echo -e "${COLOR_RED}${LANG[ERROR_REGISTER]}: $register_response${COLOR_RESET}"
     fi
-	
-    echo "$token" > token.txt
 
-	echo -e "${COLOR_YELLOW}${LANG[GET_PUBLIC_KEY]}${COLOR_RESET}"
-    sleep 1
+    echo -e "${COLOR_YELLOW}${LANG[GET_PUBLIC_KEY]}${COLOR_RESET}"
+    sleep 3
 
-    token=$(cat token.txt)
     api_response=$(curl -s -X GET "http://$domain_url/api/keygen/get" \
         -H "Authorization: Bearer $token" \
         -H "Content-Type: application/json" \
@@ -804,9 +855,9 @@ EOL
     private_key=$(echo "$keys" | grep "Private key:" | awk '{print $3}')
     public_key=$(echo "$keys" | grep "Public key:" | awk '{print $3}')
 	
-	if [ -z "$private_key" ] || [ -z "$public_key" ]; then
-            echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
-	fi
+    if [ -z "$private_key" ] || [ -z "$public_key" ]; then
+        echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
+    fi
 
     short_id=$(openssl rand -hex 8)
     cat > "$target_dir/config.json" <<EOL
