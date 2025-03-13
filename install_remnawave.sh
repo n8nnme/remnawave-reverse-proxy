@@ -749,7 +749,7 @@ installation() {
     hashed_password=$(echo -n "$SUPERADMIN_PASSWORD" | md5sum | awk '{print $1}')
 
     echo -e "${COLOR_YELLOW}${LANG[REQUEST_API_TOKEN]}${COLOR_RESET}"
-    sleep 10
+    sleep 17
     response=$(curl -s -X POST "http://$domain_url/api/auth/login" \
         -d "username=$SUPERADMIN_USERNAME&password=$hashed_password" \
         -H "Host: $PANEL_DOMAIN" \
