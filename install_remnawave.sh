@@ -585,7 +585,7 @@ services:
       retries: 3
 
   remnawave:
-    image: remnawave/backend:dev
+    image: remnawave/backend:latest
     container_name: remnawave
     hostname: remnawave
     restart: always
@@ -642,7 +642,7 @@ services:
       - ./remnawave-json/templates/subscription/index.html:/app/templates/subscription/index.html
 
   remnanode:
-    image: remnawave/node:dev
+    image: remnawave/node:latest
     container_name: remnanode
     hostname: remnanode
     restart: always
