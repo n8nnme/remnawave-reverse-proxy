@@ -21,7 +21,7 @@ set_language() {
         en)
             LANG=(
                 #Lang
-		        [CHOOSE_LANG]="Select language:"
+		[CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
@@ -55,7 +55,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Registering in Remnawave"
                 [CHECK_SERVER]="Checking server availability..."
                 [SERVER_NOT_READY]="Server is not ready, waiting..."
-		        [REGISTRATION_SUCCESS]="Registration completed successfully!"
+		[REGISTRATION_SUCCESS]="Registration completed successfully!"
                 [GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
                 [GENERATE_KEYS]="Generating x25519 keys..."
@@ -131,7 +131,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
                 [CHECK_SERVER]="Проверка доступности сервера..."
                 [SERVER_NOT_READY]="Сервер не готов, ожидание..."
-		        [REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
+		[REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
                 [GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
                 [GENERATE_KEYS]="Генерация ключей x25519..."
@@ -628,8 +628,8 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - /etc/letsencrypt/live/nothingdude.online/fullchain.pem:/etc/nginx/ssl/nothingdude.online/fullchain.pem:ro
-      - /etc/letsencrypt/live/nothingdude.online/privkey.pem:/etc/nginx/ssl/nothingdude.online/privkey.pem:ro
+      - /etc/letsencrypt/live/$DOMAIN/fullchain.pem:/etc/nginx/ssl/$DOMAIN/fullchain.pem:ro
+      - /etc/letsencrypt/live/$DOMAIN/privkey.pem:/etc/nginx/ssl/$DOMAIN/privkey.pem:ro
       - /dev/shm:/dev/shm
       - /var/www/html:/var/www/html:ro
     command: sh -c 'rm -f /dev/shm/nginx.sock && nginx -g "daemon off;"'
