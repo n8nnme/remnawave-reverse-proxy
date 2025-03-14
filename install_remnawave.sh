@@ -21,7 +21,7 @@ set_language() {
         en)
             LANG=(
                 #Lang
-		[CHOOSE_LANG]="Select language:"
+		        [CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
@@ -55,7 +55,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Registering in Remnawave"
                 [CHECK_SERVER]="Checking server availability..."
                 [SERVER_NOT_READY]="Server is not ready, waiting..."
-		[REGISTRATION_SUCCESS]="Registration completed successfully!"
+		        [REGISTRATION_SUCCESS]="Registration completed successfully!"
                 [GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
                 [GENERATE_KEYS]="Generating x25519 keys..."
@@ -131,7 +131,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
                 [CHECK_SERVER]="Проверка доступности сервера..."
                 [SERVER_NOT_READY]="Сервер не готов, ожидание..."
-		[REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
+		        [REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
                 [GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
                 [GENERATE_KEYS]="Генерация ключей x25519..."
@@ -481,6 +481,9 @@ install_remnawave() {
     SUPERADMIN_USERNAME=$(generate_user)
     SUPERADMIN_PASSWORD=$(generate_password)
 
+    cookies_random1=$(generate_user)
+    cookies_random2=$(generate_user)
+
     METRICS_USER=$(generate_user)
     METRICS_PASS=$(generate_password)
 
@@ -625,8 +628,8 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - /etc/letsencrypt/live/$DOMAIN/fullchain.pem:/etc/nginx/ssl/$DOMAIN/fullchain.pem:ro
-      - /etc/letsencrypt/live/$DOMAIN/privkey.pem:/etc/nginx/ssl/$DOMAIN/privkey.pem:ro
+      - /etc/letsencrypt/live/nothingdude.online/fullchain.pem:/etc/nginx/ssl/nothingdude.online/fullchain.pem:ro
+      - /etc/letsencrypt/live/nothingdude.online/privkey.pem:/etc/nginx/ssl/nothingdude.online/privkey.pem:ro
       - /dev/shm:/dev/shm
       - /var/www/html:/var/www/html:ro
     command: sh -c 'rm -f /dev/shm/nginx.sock && nginx -g "daemon off;"'
@@ -691,14 +694,29 @@ upstream json {
     server remnawave-subscription-page:3010;
 }
 
-map \$host \$backend {
-    $PANEL_DOMAIN  http://remnawave;
-    $SUB_DOMAIN    http://json;
-}
-
 map \$http_upgrade \$connection_upgrade {
     default upgrade;
     ""      close;
+}
+
+map \$http_cookie \$auth_cookie {
+    default 0;
+    "~*${cookies_random1}=${cookies_random2}" 1;
+}
+
+map \$arg_${cookies_random1} \$auth_query {
+    default 0;
+    "${cookies_random2}" 1;
+}
+
+map "\$auth_cookie\$auth_query" \$authorized {
+    "~1" 1;
+    default 0;
+}
+
+map \$arg_${cookies_random1} \$set_cookie_header {
+    "${cookies_random2}" "${cookies_random1}=${cookies_random2}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000";
+    default "";
 }
 
 ssl_protocols TLSv1.2 TLSv1.3;
@@ -713,7 +731,7 @@ ssl_stapling_verify on;
 resolver 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4 208.67.222.222 208.67.220.220;
 
 server {
-    server_name $PANEL_DOMAIN $SUB_DOMAIN;
+    server_name $PANEL_DOMAIN;
     listen unix:/dev/shm/nginx.sock ssl proxy_protocol;
     http2 on;
 
@@ -721,9 +739,11 @@ server {
     ssl_certificate_key "/etc/nginx/ssl/$DOMAIN/privkey.pem";
     ssl_trusted_certificate "/etc/nginx/ssl/$DOMAIN/fullchain.pem";
 
-    location / {
+    add_header Set-Cookie \$set_cookie_header;
+
+    location ~ ^/api/sub/[^/]+ {
         proxy_http_version 1.1;
-        proxy_pass \$backend;
+        proxy_pass http://remnawave;
         proxy_set_header Host \$host;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection \$connection_upgrade;
@@ -734,6 +754,76 @@ server {
         proxy_set_header X-Forwarded-Port \$server_port;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
+        error_page 404 =404;
+    }
+
+    location = / {
+        if (\$authorized = 0) {
+            return 302 https://$DOMAIN;
+        }
+        proxy_http_version 1.1;
+        proxy_pass http://remnawave;
+        proxy_set_header Host \$host;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
+        proxy_set_header X-Forwarded-Port \$server_port;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    location / {
+        if (\$authorized = 0) {
+            return 302 https://$DOMAIN;
+        }
+        proxy_http_version 1.1;
+        proxy_pass http://remnawave;
+        proxy_set_header Host \$host;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
+        proxy_set_header X-Forwarded-Port \$server_port;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    server_name $SUB_DOMAIN;
+    listen unix:/dev/shm/nginx.sock ssl proxy_protocol;
+    http2 on;
+
+    ssl_certificate "/etc/nginx/ssl/$DOMAIN/fullchain.pem";
+    ssl_certificate_key "/etc/nginx/ssl/$DOMAIN/privkey.pem";
+    ssl_trusted_certificate "/etc/nginx/ssl/$DOMAIN/fullchain.pem";
+
+    add_header Set-Cookie \$set_cookie_header;
+
+     location / {
+        proxy_http_version 1.1;
+        proxy_pass http://json;
+        proxy_set_header Host \$host;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
+        proxy_set_header X-Forwarded-Port \$server_port;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        proxy_intercept_errors on;
+        error_page 400 404 500 @redirect;
+    }
+
+    location @redirect {
+        return 404;
     }
 }
 
@@ -1041,7 +1131,7 @@ EOF
     fi
 
     if echo "$host_response" | jq -e '.response.uuid' > /dev/null; then
-	echo -e "${COLOR_YELLOW}${LANG[HOST_CREATED]}${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}${LANG[HOST_CREATED]}${COLOR_RESET}"
     else
         echo -e "${COLOR_RED}${LANG[ERROR_CREATE_HOST]}${COLOR_RESET}"
     fi
@@ -1063,7 +1153,7 @@ EOF
     echo -e "${COLOR_YELLOW}${LANG[INSTALL_COMPLETE]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}=================================================${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}${LANG[PANEL_ACCESS]}${COLOR_RESET}"
-    echo -e "${COLOR_WHITE}https://$PANEL_DOMAIN${COLOR_RESET}"
+    echo -e "${COLOR_WHITE}https://${PANEL_DOMAIN}/auth/login?${cookies_random1}=${cookies_random2}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}-------------------------------------------------${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}${LANG[ADMIN_CREDS]}${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}${LANG[USERNAME]} ${COLOR_WHITE}$SUPERADMIN_USERNAME${COLOR_RESET}"
@@ -1096,8 +1186,8 @@ reading "${LANG[PROMPT_ACTION]}" OPTION
 case $OPTION in
     1)
         if [ ! -f ${DIR_REMNAWAVE}install_packages ]; then
-	        install_packages
-	    fi
+            install_packages
+	fi
         installation
         log_clear
         ;;
