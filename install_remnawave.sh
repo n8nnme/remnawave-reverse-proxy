@@ -56,6 +56,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Registering in Remnawave"
                 [CHECK_SERVER]="Checking server availability..."
                 [SERVER_NOT_READY]="Server is not ready, waiting..."
+		[REGISTRATION_SUCCESS]="Registration completed successfully!"
                 [GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
                 [GENERATE_KEYS]="Generating x25519 keys..."
@@ -132,6 +133,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
                 [CHECK_SERVER]="Проверка доступности сервера..."
                 [SERVER_NOT_READY]="Сервер не готов, ожидание..."
+		[REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
                 [GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
                 [GENERATE_KEYS]="Генерация ключей x25519..."
@@ -811,10 +813,9 @@ installation() {
 
     if [ -z "$register_response" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_EMPTY_RESPONSE_REGISTER]}${COLOR_RESET}"
-    fi
-
-    if [[ "$register_response" == *"accessToken"* ]]; then
+    elif [[ "$register_response" == *"accessToken"* ]]; then
         token=$(echo "$register_response" | jq -r '.response.accessToken')
+        echo -e "${COLOR_GREEN}${LANG[REGISTRATION_SUCCESS]}${COLOR_RESET}"
     else
         echo -e "${COLOR_RED}${LANG[ERROR_REGISTER]}: $register_response${COLOR_RESET}"
     fi
