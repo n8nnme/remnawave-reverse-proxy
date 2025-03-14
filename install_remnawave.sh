@@ -21,7 +21,7 @@ set_language() {
         en)
             LANG=(
                 #Lang
-		            [CHOOSE_LANG]="Select language:"
+		[CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
