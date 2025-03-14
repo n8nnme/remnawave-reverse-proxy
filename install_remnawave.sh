@@ -21,14 +21,14 @@ set_language() {
         en)
             LANG=(
                 #Lang
-		[CHOOSE_LANG]="Select language:"
+		            [CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
-		[ERROR_ROOT]="Script must be run as root"
+                [ERROR_ROOT]="Script must be run as root"
                 [ERROR_OS]="Supported only Debian 11/12 and Ubuntu 22.04/24.04"
                 #Menu
-		[MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
+                [MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
                 [MENU_1]="Standard installation"
                 [MENU_2]="Reinstall panel"
                 [MENU_3]="Select random site template"
@@ -37,51 +37,51 @@ set_language() {
                 [INVALID_CHOICE]="Invalid choice. Please select 1-4."
                 [EXITING]="Exiting"
                 #Remna
-		[INSTALL_PACKAGES]="Installing required packages..."
-		[INSTALLING1]="Installing Remnawave"
-		[ENTER_PANEL_DOMAIN]="Enter panel domain (e.g. panel.example.com):"
+                [INSTALL_PACKAGES]="Installing required packages..."
+                [INSTALLING1]="Installing Remnawave"
+                [ENTER_PANEL_DOMAIN]="Enter panel domain (e.g. panel.example.com):"
                 [ENTER_SUB_DOMAIN]="Enter subscription domain (e.g. sub.example.com):"
                 [ENTER_CF_TOKEN]="Enter your Cloudflare API token or global API key:"
                 [ENTER_CF_EMAIL]="Enter your Cloudflare registered email:"
-		[CHECK_CERTS]="Checking certificates..."
-		[CERT_EXIST1]="Certificates found in /etc/letsencrypt/live/"
+                [CHECK_CERTS]="Checking certificates..."
+                [CERT_EXIST1]="Certificates found in /etc/letsencrypt/live/"
                 [CERT_EXIST]="Using existing certificates"
                 [CF_VALIDATING]="Cloudflare API key and email are valid"
                 [CF_INVALID]="Invalid Cloudflare API token or email after %d attempts."
-		[CF_INVALID_ATTEMPT]="Invalid Cloudflare API key or email. Attempt %d of %d."
+                [CF_INVALID_ATTEMPT]="Invalid Cloudflare API key or email. Attempt %d of %d."
                 [CERT_MISSING]="Certificates not found. Obtaining new ones..."
-		[CONFIG_JSON]="Configuring remnawave-json..."
-		[INSTALLING]="Please wait..."
-		#API
-		[REGISTERING_REMNAWAVE]="Registering in Remnawave"
-		[CHECK_SERVER]="Checking server availability..."
-		[SERVER_NOT_READY]="Server is not ready, waiting..."
-		[GET_PUBLIC_KEY]="Getting public key..."
+                [CONFIG_JSON]="Configuring remnawave-json..."
+                [INSTALLING]="Please wait..."
+                #API
+                [REGISTERING_REMNAWAVE]="Registering in Remnawave"
+                [CHECK_SERVER]="Checking server availability..."
+                [SERVER_NOT_READY]="Server is not ready, waiting..."
+                [GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
-		[GENERATE_KEYS]="Generating x25519 keys..."
-		[UPDATING_XRAY_CONFIG]="Updating Xray configuration..."
+                [GENERATE_KEYS]="Generating x25519 keys..."
+                [UPDATING_XRAY_CONFIG]="Updating Xray configuration..."
                 [XRAY_CONFIG_UPDATED]="Xray configuration successfully updated."
                 [NODE_CREATED]="Node successfully created."
                 [CREATE_HOST]="Creating host with UUID:"
                 [HOST_CREATED]="Host successfully created."
-		#Stop/Start
+                #Stop/Start
                 [STARTING_REMNAWAVE]="Starting Remnawave"
-		[STOPPING_REMNAWAVE]="Stopping Remnawave"
-		#Menu End
-		[INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
-		[PANEL_ACCESS]="Panel URL:"
+                [STOPPING_REMNAWAVE]="Stopping Remnawave"
+                #Menu End
+                [INSTALL_COMPLETE]="               INSTALLATION COMPLETE!"
+                [PANEL_ACCESS]="Panel URL:"
                 [ADMIN_CREDS]="To log into the panel, use the following data:"
                 [USERNAME]="Username:"
                 [PASSWORD]="Password:"
                 [RELAUNCH_CMD]="To relaunch script use command:"
-		#RandomHTML
-		[RANDOM_TEMPLATE]="Installing random template for"
+                #RandomHTML
+                [RANDOM_TEMPLATE]="Installing random template for"
                 [DOWNLOAD_FAIL]="Download failed, retrying..."
                 [UNPACK_ERROR]="Error unpacking archive"
                 [TEMPLATE_COPY]="Template copied to /var/www/html/"
                 [SELECT_TEMPLATE]="Selected template:"
-		#Error
-		[ERROR_TOKEN]="Failed to get token."
+                #Error
+                [ERROR_TOKEN]="Failed to get token."
                 [ERROR_EXTRACT_TOKEN]="Failed to extract token from response."
                 [ERROR_PUBLIC_KEY]="Failed to get public key."
                 [ERROR_EXTRACT_PUBLIC_KEY]="Failed to extract public key from response."
@@ -94,17 +94,17 @@ set_language() {
                 [ERROR_EXTRACT_UUID]="Failed to extract UUID from response."
                 [ERROR_EMPTY_RESPONSE_HOST]="Empty response from server when creating host."
                 [ERROR_CREATE_HOST]="Failed to create host."
-		[ERROR_EMPTY_RESPONSE_REGISTER]="Registration error - empty server response"
-		[ERROR_REGISTER]="Registration error"
+                [ERROR_EMPTY_RESPONSE_REGISTER]="Registration error - empty server response"
+                [ERROR_REGISTER]="Registration error"
             )
             ;;
         ru)
             LANG=(
                 #check
-		[ERROR_ROOT]="Скрипт нужно запускать с правами root"
+                [ERROR_ROOT]="Скрипт нужно запускать с правами root"
                 [ERROR_OS]="Поддержка только Debian 11/12 и Ubuntu 22.04/24.04"
                 [MENU_TITLE]="REMNAWAVE REVERSE-PROXY"
-		#Menu
+                #Menu
                 [MENU_1]="Стандартная установка"
                 [MENU_2]="Переустановить панель"
                 [MENU_3]="Выбрать случайный шаблон"
@@ -112,52 +112,52 @@ set_language() {
                 [PROMPT_ACTION]="Выберите действие (1-4):"
                 [INVALID_CHOICE]="Неверный выбор. Выберите 1-4."
                 [EXITING]="Выход"
-		#Remna
+                #Remna
                 [INSTALL_PACKAGES]="Установка необходимых пакетов..."
-		[INSTALLING1]="Установка Remnawave"
-		[ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
+                [INSTALLING1]="Установка Remnawave"
+                [ENTER_PANEL_DOMAIN]="Введите домен панели (например, panel.example.com):"
                 [ENTER_SUB_DOMAIN]="Введите домен подписки (например, sub.example.com):"
                 [ENTER_CF_TOKEN]="Введите Cloudflare API токен или глобальный ключ:"
                 [ENTER_CF_EMAIL]="Введите зарегистрированную почту Cloudflare:"
-		[CHECK_CERTS]="Проверка сертификатов..."
-		[CERT_EXIST1]="Сертификаты найдены в /etc/letsencrypt/live/"
-		[CERT_EXIST]="Используем существующие сертификаты"
+                [CHECK_CERTS]="Проверка сертификатов..."
+                [CERT_EXIST1]="Сертификаты найдены в /etc/letsencrypt/live/"
+                [CERT_EXIST]="Используем существующие сертификаты"
                 [CF_VALIDATING]="Cloudflare API ключ и email валидны"
                 [CF_INVALID]="Неверный Cloudflare API ключ или email после %d попыток."
-		[CF_INVALID_ATTEMPT]="Неверный Cloudflare API ключ или email. Попытка %d из %d."
+                [CF_INVALID_ATTEMPT]="Неверный Cloudflare API ключ или email. Попытка %d из %d."
                 [CERT_MISSING]="Сертификаты не найдены. Получаем новые..."
-		[CONFIG_JSON]="Настройка remnawave-json..."
-		[INSTALLING]="Пожалуйста, подождите..."
-		#API
-		[REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
-		[CHECK_SERVER]="Проверка доступности сервера..."
-		[SERVER_NOT_READY]="Сервер не готов, ожидание..."
-		[GET_PUBLIC_KEY]="Получаем публичный ключ..."
+                [CONFIG_JSON]="Настройка remnawave-json..."
+                [INSTALLING]="Пожалуйста, подождите..."
+                #API
+                [REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
+                [CHECK_SERVER]="Проверка доступности сервера..."
+                [SERVER_NOT_READY]="Сервер не готов, ожидание..."
+                [GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
-		[GENERATE_KEYS]="Генерация ключей x25519..."
-		[UPDATING_XRAY_CONFIG]="Обновление конфигурации Xray..."
+                [GENERATE_KEYS]="Генерация ключей x25519..."
+                [UPDATING_XRAY_CONFIG]="Обновление конфигурации Xray..."
                 [XRAY_CONFIG_UPDATED]="Конфигурация Xray успешно обновлена."
                 [NODE_CREATED]="Узел успешно создан."
                 [CREATE_HOST]="Создаем хост с UUID:"
                 [HOST_CREATED]="Хост успешно создан."
-		#Stop/Start
+                #Stop/Start
                 [STOPPING_REMNAWAVE]="Остановка Remnawave"
-		[STARTING_REMNAWAVE]="Запуск Remnawave"
-		#Menu End
+                [STARTING_REMNAWAVE]="Запуск Remnawave"
+                #Menu End
                 [INSTALL_COMPLETE]="               УСТАНОВКА ЗАВЕРШЕНА!"
                 [PANEL_ACCESS]="Панель доступна по адресу:"
                 [ADMIN_CREDS]="Для входа в панель используйте следующие данные:"
                 [USERNAME]="Логин:"
                 [PASSWORD]="Пароль:"
                 [RELAUNCH_CMD]="Для повторного запуска:"
-		#RandomHTML
+                #RandomHTML
                 [DOWNLOAD_FAIL]="Ошибка загрузки, повторная попытка..."
                 [UNPACK_ERROR]="Ошибка распаковки архива"
-		[RANDOM_TEMPLATE]="Установка случайного шаблона для"
+                [RANDOM_TEMPLATE]="Установка случайного шаблона для"
                 [TEMPLATE_COPY]="Шаблон скопирован в /var/www/html/"
                 [SELECT_TEMPLATE]="Выбран шаблон:"
-		#Error
-		[ERROR_TOKEN]="Не удалось получить токен."
+                #Error
+                [ERROR_TOKEN]="Не удалось получить токен."
                 [ERROR_EXTRACT_TOKEN]="Не удалось извлечь токен из ответа."
                 [ERROR_PUBLIC_KEY]="Не удалось получить публичный ключ."
                 [ERROR_EXTRACT_PUBLIC_KEY]="Не удалось извлечь публичный ключ из ответа."
@@ -170,8 +170,8 @@ set_language() {
                 [ERROR_EXTRACT_UUID]="Не удалось извлечь UUID из ответа."
                 [ERROR_EMPTY_RESPONSE_HOST]="Пустой ответ от сервера при создании хоста."
                 [ERROR_CREATE_HOST]="Не удалось создать хост."
-		[ERROR_EMPTY_RESPONSE_REGISTER]="Ошибка при регистрации - пустой ответ сервера"
-		[ERROR_REGISTER]="Ошибка регистрации"
+                [ERROR_EMPTY_RESPONSE_REGISTER]="Ошибка при регистрации - пустой ответ сервера"
+                [ERROR_REGISTER]="Ошибка регистрации"
             )
             ;;
     esac
