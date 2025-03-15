@@ -995,12 +995,12 @@ EOL
                 ]
             },
             "streamSettings": {
-                "network": "raw",
+                "network": "tcp",
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
                     "xver": 1,
-                    "target": "/dev/shm/nginx.sock",
+                    "dest": "/dev/shm/nginx.sock",
                     "spiderX": "",
                     "shortIds": [
                         "$short_id"
