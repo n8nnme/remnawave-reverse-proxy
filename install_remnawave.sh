@@ -972,7 +972,7 @@ EOL
         "queryStrategy": "ForceIPv4",
         "servers": [
             {
-                "address": "https://1.1.1.1/dns-query",
+                "address": "https://dns.google/dns-query",
                 "skipFallback": false
             }
         ]
