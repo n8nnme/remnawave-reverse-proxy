@@ -355,8 +355,11 @@ randomhtml() {
 install_packages() {
     echo -e "${COLOR_YELLOW}${LANG[INSTALL_PACKAGES]}${COLOR_RESET}"
     apt-get update -y
-    apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git certbot python3-certbot-dns-cloudflare
-
+    apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git certbot python3-certbot-dns-cloudflare unattended-upgrades locales
+    
+    locale-gen en_US.UTF-8
+    update-locale LANG=en_US.UTF-8
+    
     if grep -q "Ubuntu" /etc/os-release; then
         install -m 0755 -d /etc/apt/keyrings
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | tee /etc/apt/keyrings/docker.asc > /dev/null
@@ -402,6 +405,13 @@ install_packages() {
     ufw allow 22/tcp comment 'SSH'
     ufw allow 443/tcp comment 'HTTPS'
     ufw --force enable
+    
+    # Unattended-upgrade
+    echo 'Unattended-Upgrade::Mail "root";' >> /etc/apt/apt.conf.d/50unattended-upgrades
+    echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | debconf-set-selections
+    dpkg-reconfigure -f noninteractive unattended-upgrades
+    systemctl restart unattended-upgrades
+
     touch ${DIR_REMNAWAVE}install_packages
     clear
 }
@@ -885,7 +895,7 @@ installation() {
     config_file="$target_dir/config.json"
 
     echo -e "${COLOR_YELLOW}${LANG[REGISTERING_REMNAWAVE]}${COLOR_RESET}"
-    sleep 10
+    sleep 20
 	
     echo -e "${COLOR_YELLOW}${LANG[CHECK_SERVER]}${COLOR_RESET}"
     until curl -s "http://$domain_url/api/auth/register" > /dev/null; do
@@ -941,9 +951,12 @@ EOL
 
     echo -e "${COLOR_YELLOW}${LANG[GENERATE_KEYS]}${COLOR_RESET}"
     sleep 1
-    keys=$(docker run --rm ghcr.io/xtls/xray-core x25519)
+    docker run --rm ghcr.io/xtls/xray-core x25519 > /tmp/xray_keys.txt 2>&1 &
+    spinner $! "${LANG[WAITING]}"
+    keys=$(cat /tmp/xray_keys.txt)
     private_key=$(echo "$keys" | grep "Private key:" | awk '{print $3}')
     public_key=$(echo "$keys" | grep "Public key:" | awk '{print $3}')
+    rm -f /tmp/xray_keys.txt
 	
     if [ -z "$private_key" ] || [ -z "$public_key" ]; then
         echo -e "${COLOR_RED}${LANG[ERROR_GENERATE_KEYS]}${COLOR_RESET}"
@@ -953,7 +966,16 @@ EOL
     cat > "$target_dir/config.json" <<EOL
 {
     "log": {
-        "loglevel": "debug"
+        "loglevel": "warning"
+    },
+    "dns": {
+        "queryStrategy": "ForceIPv4",
+        "servers": [
+            {
+                "address": "https://1.1.1.1/dns-query",
+                "skipFallback": false
+            }
+        ]
     },
     "inbounds": [
         {
@@ -1194,7 +1216,9 @@ case $OPTION in
         ;;
     2)
         cd /root/remnawave
-        docker compose down -v --rmi all --remove-orphans && docker system prune -a --volumes -f > /dev/null 2>&1 &
+        docker compose down -v --rmi all --remove-orphans > /dev/null 2>&1 &
+        spinner $! "${LANG[WAITING]}"
+        docker system prune -a --volumes -f > /dev/null 2>&1 &
         spinner $! "${LANG[WAITING]}"
         rm -rf /root/remnawave
         installation
