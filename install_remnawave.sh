@@ -636,7 +636,7 @@ services:
       retries: 3
 
   remnawave:
-    image: remnawave/backend:latest
+    image: remnawave/backend:dev
     container_name: remnawave
     hostname: remnawave
     restart: always
@@ -668,7 +668,7 @@ services:
       retries: 3
 
   remnawave-nginx:
-    image: nginx:1.27
+    image: nginx:mainline
     container_name: remnawave-nginx
     hostname: remnawave-nginx
     restart: always
@@ -702,7 +702,7 @@ services:
       - remnawave-network
 
   remnanode:
-    image: remnawave/node:latest
+    image: remnawave/node:dev
     container_name: remnanode
     hostname: remnanode
     restart: always
@@ -775,7 +775,7 @@ ssl_session_cache shared:MozSSL:10m;
 
 ssl_stapling on;
 ssl_stapling_verify on;
-resolver 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4 208.67.222.222 208.67.220.220;
+resolver 1.1.1.1 1.0.0.1;
 
 server {
     server_name $PANEL_DOMAIN;
@@ -992,7 +992,7 @@ EOL
         "queryStrategy": "ForceIPv4",
         "servers": [
             {
-                "address": "https://dns.google/dns-query",
+                "address": "https://cloudflare-dns.com/dns-query",
                 "skipFallback": false
             }
         ]
