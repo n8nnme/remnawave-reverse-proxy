@@ -303,7 +303,7 @@ get_sshport() {
     
     
     if [ -z "$number" ]; then
-      echo "$LANG[ERROR_SSH_BLANK]"
+      echo "{$LANG[ERROR_SSH_BLANK]}"
     fi
     
     
@@ -311,10 +311,10 @@ get_sshport() {
       if [ "$number" -ge 1 ] && [ "$number" -le 65535 ]; then
         valid=true
       else
-        echo "$LANG[ERROR_SSH_BIG]"
+        echo "{$LANG[ERROR_SSH_BIG]}"
       fi
     else
-      echo "$LANG[ERROR_SSH_INVALID]"
+      echo "${LANG[ERROR_SSH_INVALID]}"
     fi
   done
   
