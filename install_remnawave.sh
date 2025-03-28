@@ -389,7 +389,7 @@ randomhtml() {
 
 install_packages() {
     echo -e "${COLOR_YELLOW}${LANG[INSTALL_PACKAGES]}${COLOR_RESET}"
-    ssh_port = $(get_sshport)
+    local ssh_port = $(get_sshport)
     apt-get update -y
     apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git certbot python3-certbot-dns-cloudflare unattended-upgrades locales
     
