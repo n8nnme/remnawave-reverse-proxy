@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR_REMNAWAVE="/usr/local/remnawave_reverse/"
-SCRIPT_URL="https://raw.githubusercontent.com/eGamesAPI/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/n8nnme/remnawave-reverse-proxy/refs/heads/main/install_remnawave.sh"
 
 COLOR_RESET="\033[0m"
 COLOR_GREEN="\033[32m"
@@ -21,7 +21,7 @@ set_language() {
         en)
             LANG=(
                 #Lang
-		[CHOOSE_LANG]="Select language:"
+		        [CHOOSE_LANG]="Select language:"
                 [LANG_EN]="English"
                 [LANG_RU]="Russian"
                 #check
@@ -55,7 +55,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Registering in Remnawave"
                 [CHECK_SERVER]="Checking server availability..."
                 [SERVER_NOT_READY]="Server is not ready, waiting..."
-		[REGISTRATION_SUCCESS]="Registration completed successfully!"
+		        [REGISTRATION_SUCCESS]="Registration completed successfully!"
                 [GET_PUBLIC_KEY]="Getting public key..."
                 [PUBLIC_KEY_SUCCESS]="Public key successfully obtained."
                 [GENERATE_KEYS]="Generating x25519 keys..."
@@ -96,6 +96,9 @@ set_language() {
                 [ERROR_CREATE_HOST]="Failed to create host."
                 [ERROR_EMPTY_RESPONSE_REGISTER]="Registration error - empty server response"
                 [ERROR_REGISTER]="Registration error"
+                [ERROR_SSH_BIG]="It's so big dude"
+                [ERROR_SSH_BLANK]="Write number, suck?"
+                [ERROR_SSH_INVALID]="Not Valid Individual, choose 1-65535 ports"
             )
             ;;
         ru)
@@ -131,7 +134,7 @@ set_language() {
                 [REGISTERING_REMNAWAVE]="Регистрация в Remnawave"
                 [CHECK_SERVER]="Проверка доступности сервера..."
                 [SERVER_NOT_READY]="Сервер не готов, ожидание..."
-		[REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
+		        [REGISTRATION_SUCCESS]="Регистрация прошла успешно!"
                 [GET_PUBLIC_KEY]="Получаем публичный ключ..."
                 [PUBLIC_KEY_SUCCESS]="Публичный ключ успешно получен."
                 [GENERATE_KEYS]="Генерация ключей x25519..."
@@ -172,6 +175,9 @@ set_language() {
                 [ERROR_CREATE_HOST]="Не удалось создать хост."
                 [ERROR_EMPTY_RESPONSE_REGISTER]="Ошибка при регистрации - пустой ответ сервера"
                 [ERROR_REGISTER]="Ошибка регистрации"
+                [ERROR_SSH_BLANK]="Ошибка: Ввод не может быть пустым. Совсем dead inside, что даже цифры ответить тупому скрипту не можешь?"
+                [ERROR_SSH_BIG]="Ошибка: Порт должен быть в диапазоне от 1 до 65535. Пожалуйста, не будь ебланом и укажи нормально, хуль как дурак блять."
+                [ERROR_SSH_INVALID]="Ошибка: '$number' не является допустимым числом. Нахуя ты такое число указал, если тебе надо 1-65535 порты выбирать без +-? Не отвечай, просто напиши нормальное."
             )
             ;;
     esac
@@ -287,6 +293,35 @@ add_cron_rule() {
     ( crontab -l | grep -Fxq "$logged_rule" ) || ( crontab -l 2>/dev/null; echo "$logged_rule" ) | crontab -
 }
 
+get_sshport() {
+  local prompt="${1:-SSH port number: }"
+  local number=""
+  local valid=false
+  
+  while [ "$valid" = false ]; do
+    read -p "$prompt" number
+    
+    
+    if [ -z "$number" ]; then
+      echo "$LANG[ERROR_SSH_BLANK]"
+    fi
+    
+    
+    if [[ "$number" =~ ^[0-9]+$ ]]; then
+      if [ "$number" -ge 1 ] && [ "$number" -le 65535 ]; then
+        valid=true
+      else
+        echo "$LANG[ERROR_SSH_BIG]"
+      fi
+    else
+      echo "$LANG[ERROR_SSH_INVALID]"
+    fi
+  done
+  
+  echo "$number"
+}
+
+
 spinner() {
   local pid=$1
   local text=$2
@@ -354,6 +389,7 @@ randomhtml() {
 
 install_packages() {
     echo -e "${COLOR_YELLOW}${LANG[INSTALL_PACKAGES]}${COLOR_RESET}"
+    ssh_port = $get_sshport
     apt-get update -y
     apt-get install -y ca-certificates curl jq ufw wget gnupg unzip nano dialog git certbot python3-certbot-dns-cloudflare unattended-upgrades locales
     
@@ -402,7 +438,7 @@ install_packages() {
 
     # UFW
     ufw --force reset
-    ufw allow 22/tcp comment 'SSH'
+    ufw allow "$ssh_port/tcp" comment 'SSH'
     ufw allow 443/tcp comment 'HTTPS'
     ufw --force enable
     
