@@ -15,6 +15,7 @@ declare -A LANG=(
     [LANG_EN]="English"
     [LANG_RU]="Russian"
 )
+# test
 
 set_language() {
     case $1 in
